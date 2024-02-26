@@ -1,0 +1,6 @@
+[flake8]
+max-line-length = 80
+docstring_convention = google
+extend-ignore = E203, D202, D205, D212, D415
+exclude = __pycache__, build/, dist/, .eggs, .git, .tox, .mypy_cache, .vscode
+per-file-ignores = */__init__.py:F401
