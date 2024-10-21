@@ -1,2 +1,3 @@
 # AIRL Market Making
-Codes for my master thesis from ETH Zürich &amp; UZH on reinforcement learning for market making.
+
+The official repository for the paper Adversarial Inverse Reinforcement Learning published in the proceedings of the ICAIF'24 conference.
