@@ -1,0 +1,430 @@
+version: 2.1
+
+orbs:
+  codecov: codecov/codecov@3.2.3
+  shellcheck: circleci/shellcheck@3.1.2
+  win: circleci/windows@4.1
+
+defaults: &defaults
+  docker:
+    - image: humancompatibleai/imitation:base
+      auth:
+        username: $DOCKERHUB_USERNAME
+        password: $DOCKERHUB_PASSWORD
+  working_directory: /imitation
+
+executors:
+  unit-test-linux:
+    <<: *defaults
+    resource_class: xlarge
+    environment:
+      # more CPUs visible but we're throttled to 8, which breaks auto-detect
+      NUM_CPUS: 8
+      # Prevent git lfs from downloading files upon checkout
+      # (we want to do this explicitly, so we can cache them)
+      # see https://naiyer.dev/post/2020/09/05/using-git-lfs-in-ci/ for details
+      GIT_LFS_SKIP_SMUDGE: 1
+  static-analysis-xlarge:
+    <<: *defaults
+    # darglint is slow enough that we benefit from xlarge even for linting.
+    # However, there's little benefit from larger parallelization (I think there's
+    # a handful of files with long docstrings causing the bulk of the time).
+    resource_class: xlarge
+    environment:
+      # If you change these, also change ci/code_checks.sh
+      SRC_FILES: src/ tests/ experiments/ examples/ docs/conf.py setup.py ci/
+      NUM_CPUS: 8
+  static-analysis-medium:
+    <<: *defaults
+    resource_class: medium
+    environment:
+      # If you change these, also change ci/code_checks.sh
+      SRC_FILES: src/ tests/ experiments/ examples/ docs/conf.py setup.py ci/
+      NUM_CPUS: 2
+
+commands:
+  dependencies-linux:
+    # You must still manually update the Docker image if any
+    # binary (non-Python) dependencies change.
+    description: "Check out and update Python dependencies on Linux."
+    steps:
+      - checkout
+
+      # Download and cache git-lfs files
+      - run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+      - restore_cache:
+          keys:
+            - v1-lfscache-{{ checksum ".lfs-assets-id" }}
+            - v1-lfscache-
+      - run: git lfs pull
+      - save_cache:
+          paths:
+            - .git/lfs
+          key: v1-lfscache-{{ checksum ".lfs-assets-id" }}
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v8linux-dependencies-{{ checksum "setup.py" }}-{{ checksum "ci/build_and_activate_venv.sh" }}
+
+      - run:
+          name: install dependencies
+          # Only create venv if it's not been restored from cache
+          command: "[[ -d /venv ]] || ./ci/build_and_activate_venv.sh /venv"
+
+      - save_cache:
+          paths:
+            - /venv
+          key: v8linux-dependencies-{{ checksum "setup.py" }}-{{ checksum "ci/build_and_activate_venv.sh" }}
+
+      - run:
+          name: install imitation
+          command: pip install --upgrade --force-reinstall --no-deps .
+
+      - run:
+          name: print installed packages
+          command: pip freeze --all
+
+  dependencies-macos:
+    description: "Check out and update Python dependencies on macOS."
+    steps:
+      - run:
+          name: install macOS packages
+          command: HOMEBREW_NO_AUTO_UPDATE=1 brew install coreutils parallel gnu-getopt
+
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v7macos-dependencies-{{ checksum "setup.py" }}-{{ checksum "ci/build_and_activate_venv.sh" }}
+
+      - run:
+          name: install dependencies
+          # Only create venv if it's not been restored from cache.
+          # We use python3.9 on macOS due to a bug with importing `ray` in python3.8:
+          # https://github.com/ray-project/ray/issues/27380
+          command: "[[ -d ~/venv ]] || ./ci/build_and_activate_venv.sh ~/venv python3.9"
+
+      - save_cache:
+          paths:
+            - ~/venv
+          key: v7macos-dependencies-{{ checksum "setup.py" }}-{{ checksum "ci/build_and_activate_venv.sh" }}
+
+      - run:
+          name: install imitation
+          command: |
+            source ~/venv/bin/activate
+            pip install --upgrade --force-reinstall --no-deps .
+
+      - run:
+          name: print installed packages
+          command: |
+            source ~/venv/bin/activate
+            pip freeze --all
+
+  dependencies-windows:
+    description: "Check out and update Python dependencies on Windows."
+    steps:
+      # Note: The error preference is set to Stop in powershell which only applies to
+      # cmdlets. For exes, will have to manually check $LastErrorCode as done for pytest.
+      - run:
+          name: set error preference for ps
+          command: |
+            Add-Content -Path $PSHOME/Profile.ps1 -Value "`$ErrorActionPreference='Stop'"
+          shell: powershell.exe
+
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v11win-dependencies-{{ checksum "setup.py" }}-{{ checksum "ci/build_and_activate_venv.ps1" }}
+
+      - run:
+          name: install python
+          command: choco install --allow-downgrade -y python --version=3.8.10
+          shell: powershell.exe
+
+      - run:
+          name: install openssl and ffmpeg
+          command: choco install -y ffmpeg openssl
+          shell: powershell.exe
+
+      - run:
+          name: upgrade pip
+          command: |
+              python -m pip install --upgrade pip
+          shell: powershell.exe
+
+      - run:
+          name: install virtualenv
+          command: pip install virtualenv
+          shell: powershell.exe
+
+      - run:
+          name: install dependencies
+          # Only create venv if it's not been restored from cache
+          command: if (-not (Test-Path venv)) { .\ci\build_and_activate_venv.ps1 -venv venv }
+          shell: powershell.exe
+
+      - save_cache:
+          paths:
+            - .\venv
+          key: v11win-dependencies-{{ checksum "setup.py" }}-{{ checksum "ci/build_and_activate_venv.ps1" }}
+
+      - run:
+          name: install imitation
+          command: |
+            .\venv\Scripts\activate
+            pip install --upgrade --force-reinstall --no-deps .
+          shell: powershell.exe
+
+      - run:
+          name: print installed packages
+          command: |
+            .\venv\Scripts\activate
+            pip freeze --all
+          shell: powershell.exe
+
+      - run:
+          name: enable long path
+          command: |
+            New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
+            -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+          shell: powershell.exe
+
+  restore-pytest-cache:
+    description: "Restore .pytest_cache from CircleCI cache."
+    steps:
+      # The setup.py checksum in the cache name ensures that we retrain our expert
+      # policies, which are cached in the pytest cache, whenever setup.py changes. This
+      # is just a rough heuristic to decide when the experts should be retrained but
+      # still better than nothing.
+      - restore_cache:
+          keys:
+            - v7-pytest-cache-{{ arch }}-{{ checksum "setup.py" }}
+            # This prefix-matched key restores the most recent pytest cache with any
+            # checksum. If that cached policy happens to be still loadable, we avoid
+            # retraining. See https://circleci.com/docs/2.0/caching/#restoring-cache
+            - v7-pytest-cache-{{ arch }}-
+          paths:
+            - .pytest_cache
+
+  save-pytest-cache:
+    description: "Save .pytest_cache in CircleCI cache."
+    steps:
+      - save_cache:
+          key: v7-pytest-cache-{{ arch }}-{{ checksum "setup.py" }}
+          paths:
+            - .pytest_cache
+
+  store-test-output-unix:
+    description: "Store the output of tests."
+    steps:
+      - store_artifacts:
+          path: /tmp/test-reports
+          destination: test-reports
+
+      - store_test_results:
+          path: /tmp/test-reports
+
+      - store_artifacts:
+          path: /tmp/resource-usage
+          destination: resource-usage
+
+
+jobs:
+  lint:
+    executor: static-analysis-xlarge
+
+    steps:
+      - dependencies-linux
+
+      # We use the shellcheck orb for this, not pre-commit, as the pre-commit
+      # hook for shellcheck needs Docker. Running Docker-in-Docker on CircleCI
+      # is technically possible (https://circleci.com/docs/building-docker-images/)
+      # but more complex than just using the orb.
+      - shellcheck/install
+      - shellcheck/check:
+          dir: .
+          # Orb invokes shellcheck once per file. shellcheck complains if file
+          # includes another file not given on the command line. Ignore this,
+          # since they'll just get checked in a separate shellcheck invocation.
+          exclude: SC1091
+
+      - run:
+          name: ipynb-check
+          command: pre-commit run --all check-notebooks
+
+      - run:
+          name: typeignore-check
+          command: ./ci/check_typeignore.py ${SRC_FILES}
+
+      - run:
+          name: flake8
+          command: |
+            flake8 --version
+            pre-commit run --all flake8
+
+      - run:
+          name: black
+          command: |
+            black --version
+            pre-commit run --all black
+            pre-commit run --all black-jupyter
+
+      - run:
+          name: isort
+          command: pre-commit run --all isort
+
+      - run:
+          name: codespell
+          command: pre-commit run --all codespell
+
+      - run:
+          name: lint-misc
+          command: |
+            pre-commit run --all check-ast
+            pre-commit run --all trailing-whitespace
+            pre-commit run --all end-of-file-fixer
+            pre-commit run --all check-toml
+            pre-commit run --all check-added-large-files
+
+  doctest:
+    executor: static-analysis-medium
+
+    steps:
+      - dependencies-linux
+      - run:
+          name: sphinx
+          environment:
+            # Note: we don't want to execute the example notebooks in this step since
+            #   this happens in a separate readthedocs job anyway.
+            NB_EXECUTION_MODE: "off"
+          command: pushd docs/ && make clean && make doctest && popd
+
+  type:
+    executor: static-analysis-medium
+    steps:
+      - dependencies-linux
+
+      - run:
+          name: pytype
+          command: pytype --version && pre-commit run --all pytype
+
+      - run:
+          name: mypy
+          command: mypy --version && pre-commit run --all mypy
+
+  unit-test-linux:
+    executor: unit-test-linux
+    steps:
+      - dependencies-linux
+
+      - run:
+          name: Memory Monitor
+          command: |
+            mkdir /tmp/resource-usage
+            export FILE=/tmp/resource-usage/memory.txt
+            while true; do
+              ps -u root eo pid,%cpu,%mem,args,uname --sort=-%mem >> $FILE
+              echo "----------" >> $FILE
+              sleep 1
+            done
+          background: true
+
+      - restore-pytest-cache
+
+      - run:
+          name: run tests
+          command: |
+            Xdummy-entrypoint.py pytest -n ${NUM_CPUS} --cov=/venv/lib/python3.8/site-packages/imitation \
+                  --cov=tests --junitxml=/tmp/test-reports/junit.xml \
+                  --durations=500 -vv tests/
+            mv .coverage .coverage.imitation
+            coverage combine  # rewrite paths from virtualenv to src/
+
+      - codecov/upload
+      - save-pytest-cache
+      - store-test-output-unix
+
+  unit-test-macos:
+    macos:
+      xcode: 13.4.1
+    parallelism: 2
+    steps:
+      - dependencies-macos
+      - restore-pytest-cache
+
+      - run:
+          name: run tests
+          command: |
+            source ~/venv/bin/activate
+            ALL_TESTFILES=$(circleci tests glob "tests/**/test*.py")
+            echo "All testfiles: ${ALL_TESTFILES}"
+            TESTFILES=$(circleci tests glob "tests/**/test*.py" | circleci tests split --split-by=timings)
+            echo "This shard testing: ${TESTFILES}"
+            pytest -n auto --junitxml=/tmp/test-reports/junit.xml -vv $TESTFILES
+
+      - save-pytest-cache
+      - store-test-output-unix
+
+
+  unit-test-windows:
+    executor:
+      name: win/default
+      size: xlarge
+      # using bash.exe as the default shell because the codecov/upload command
+      # does not work if we default to powershell.exe as it internally uses a bash script.
+      # Moreover it is not possible to specify the shell just for that command.
+      shell: bash.exe
+
+    steps:
+      - dependencies-windows
+      - restore-pytest-cache
+
+      - run:
+          name: run tests
+          command: |
+            .\venv\Scripts\activate
+            pytest -n auto --cov=venv\Lib\site-packages\imitation `
+            --cov=tests --junitxml=\tmp\test-reports\junit.xml -vv tests\
+            # manually checking (required for exes) and returning if pytest gives error code other than 0
+            if ($LASTEXITCODE -ne 0) { throw "pytest failed" }
+            mv .coverage .coverage.imitation
+            coverage combine  # rewrite paths from virtualenv to src/
+          shell: powershell.exe
+
+      - codecov/upload
+      - save-pytest-cache
+
+      - store_artifacts:
+          path: \tmp\test-reports
+          destination: test-reports
+
+      - store_test_results:
+          path: \tmp\test-reports
+
+      - store_artifacts:
+          path: \tmp\resource-usage
+          destination: resource-usage
+
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - lint:
+          context:
+          - docker-hub-creds
+      - doctest:
+          context:
+          - docker-hub-creds
+      - type:
+          context:
+          - docker-hub-creds
+      - unit-test-linux:
+          context:
+          - docker-hub-creds
+      - unit-test-macos
+      - unit-test-windows

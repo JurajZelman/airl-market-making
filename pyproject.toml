@@ -1,14 +1,17 @@
 [tool.poetry]
-name = "reinforcement-learning"
-version = "0.1.0"
-description = "Reinforcement learning for high-frequency market making."
+name = "airl-market-making"
+version = "1.0.0"
+description = "Codes for the AIRL for Market Making paper."
 authors = ["Juraj Zelman"]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.12"
+imitation = {path = "./.packages/imitation-1.0.0"}
+stable-baselines3 = {path = "./.packages/stable_baselines3-2.2.1"}
 numpy = "^1.26.0"
-setuptools = "66"
 matplotlib = "^3.8.0"
+setuptools = "^66"
 sortedcontainers = "^2.4.0"
 plotly = "^5.17.0"
 ipykernel = "^6.25.2"
@@ -17,37 +20,47 @@ polars = "^0.19.15"
 pandas = "^2.1.1"
 ipywidgets = "^8.1.1"
 rich = "^13.6.0"
-imitation = "^1.0.0"
-stable-baselines3 = "^2.2.1"
 pyllist = "^0.3"
 sbx-rl = "^0.9.0"
 seaborn = "^0.13.2"
 
 [tool.poetry.group.dev.dependencies]
-pre-commit = "^3.0.4"
-mypy = "^1.0.0"
-ipykernel = "^6.25.2"
-
-[tool.poetry.group.test.dependencies]
-pytest = "^7.2.1"
-pytest-cov = "^4.0.0"
+ruff = "^0.6.5"
+pre-commit = "^3.8.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
+[tool.ruff]
 line-length = 80
-safe = true
+indent-width = 4
+exclude = [
+    ".packages/", # exclude formatting of package modifications
+]
 
-[tool.isort]
-profile = "black"
-skip_gitignore = true
-line_length = 80
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "N",   # PEP8 naming convetions
+    "D"    # pydocstyle
+]
+ignore = [
+    "C901",  # too complex
+    "W191",  # indentation contains tabs
+    "D401"   # imperative mood
+]
 
-[tool.coverage.report]
-exclude_lines = ["pragma: no cover"]
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
-[tool.bandit]
-exclude_dirs = ["tests"]
-skips = ["B311"]
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

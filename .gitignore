@@ -149,7 +149,7 @@ cython_debug/
 # Built Visual Studio Code Extensions
 *.vsix
 
-# ---------------- Project directories----------------
+# ---------------- Project-specific directories----------------
 data/
 logs/
 results_backtest/
