@@ -155,7 +155,7 @@ def test_save_load(tmp_path, model_class, use_sde):
         gradient_steps=n_envs,
         train_freq=4,
         learning_starts=100,
-        **kwargs,
+        **kwargs
     )
 
     model.learn(total_timesteps=150)

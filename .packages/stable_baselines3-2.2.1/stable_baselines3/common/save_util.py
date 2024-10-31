@@ -2,7 +2,6 @@
 Save util taken from stable_baselines
 used to serialize data (class parameters) of model classes
 """
-
 import base64
 import functools
 import io
