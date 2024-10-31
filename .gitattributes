@@ -1,2 +1,4 @@
 # Ensure that text files have normalized line endings
 * text=auto
+.packages/imitation-1.0.0/tests/testdata/*.npz filter=lfs diff=lfs merge=lfs -text
+.packages/imitation-1.0.0/tests/testdata/*.pkl filter=lfs diff=lfs merge=lfs -text
