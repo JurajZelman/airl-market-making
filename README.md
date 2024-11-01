@@ -2,6 +2,8 @@
 
 This repository contains the code for the paper *Adversarial Inverse Reinforcement Learning* published in the proceedings of the [ICAIF'24](https://ai-finance.org/) conference. The paper is a joint work with Martin Stefanik (Richfox Capital &  ETH Zürich), Moritz Weiß (ETH Zürich) and Prof. Dr. Josef Teichmann (ETH Zürich).
 
+The full training pipeline can be found in [`main.ipynb`](main.ipynb).
+
 ## Abstract
 
 In this paper, we propose a novel application of the Adversarial Inverse Reinforcement Learning (AIRL) algorithm combining the framework of generative adversarial networks and inverse reinforcement learning for automated reward acquisition in the market making problem. We demonstrate that this algorithm can be used to learn a pure market making strategy. An advantage of such an approach is the possibility for further training in the reinforcement learning framework while potentially preserving its explainability and already acquired domain knowledge incorporated in an expert's decision process.
