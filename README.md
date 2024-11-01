@@ -4,23 +4,27 @@ This repository contains the code for the paper *Adversarial Inverse Reinforceme
 
 The full training pipeline can be found in [`main.ipynb`](main.ipynb).
 
-## Abstract
+## TODO list
 
-In this paper, we propose a novel application of the Adversarial Inverse Reinforcement Learning (AIRL) algorithm combining the framework of generative adversarial networks and inverse reinforcement learning for automated reward acquisition in the market making problem. We demonstrate that this algorithm can be used to learn a pure market making strategy. An advantage of such an approach is the possibility for further training in the reinforcement learning framework while potentially preserving its explainability and already acquired domain knowledge incorporated in an expert's decision process.
-
-## TODO:
-
-- [ ] New poetry setup.
-- [ ] Ensure the reproducibility of the environment with modified packages.
-- [ ] Organize all modules under the `src` directory.
-- [ ] Reorganize the code into one main notebook?
+- [x] New poetry setup.
+- [x] Ensure the reproducibility of the environment with modified packages.
+- [x] Organize all modules under the `src` directory.
+- [x] Update the title image.
+- [ ] Data download pipeline.
+- [ ] Data cleaning pipeline.
+- [ ] Generation of volume distributions.
+- [ ] Generation of rollouts.
+- [ ] Backtest results pipeline.
 - [ ] Remove unnecessary codes and files.
-- [ ] Update the title image.
 - [ ] Update the README with the new structure.
 - [ ] Add appendix with additional results?
 - [ ] Add the link to the paper.
 - [ ] Upload the saved models.
+- [ ] Update the documentation (installation, repository description, modified packages, training details, strategy limitations, etc.).
 
+## Abstract
+
+In this paper, we propose a novel application of the Adversarial Inverse Reinforcement Learning (AIRL) algorithm combining the framework of generative adversarial networks and inverse reinforcement learning for automated reward acquisition in the market making problem. We demonstrate that this algorithm can be used to learn a pure market making strategy. An advantage of such an approach is the possibility for further training in the reinforcement learning framework while potentially preserving its explainability and already acquired domain knowledge incorporated in an expert's decision process.
 
 ## Disclaimer
 

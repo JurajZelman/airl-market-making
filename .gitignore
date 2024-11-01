@@ -154,6 +154,4 @@ data/
 logs/
 results_backtest/
 images/
-models/
 monitor_logs/
-automated_backtests/
