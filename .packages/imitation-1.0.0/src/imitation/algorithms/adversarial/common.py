@@ -3,8 +3,8 @@
 import abc
 import dataclasses
 import logging
-import os  # TODO:
-from datetime import datetime  # TODO:
+import os  # MODIFIED:
+from datetime import datetime  # MODIFIED:
 from typing import Callable, Iterable, Iterator, Mapping, Optional, Type, overload
 
 import numpy as np
@@ -22,13 +22,13 @@ from stable_baselines3.common import (
     policies,
     vec_env,
 )
-from stable_baselines3.common.evaluation import evaluate_policy  # TODO:
+from stable_baselines3.common.evaluation import evaluate_policy  # MODIFIED:
 from stable_baselines3.sac import policies as sac_policies
 from torch.nn import functional as F
 
-from src.rl.utils import save_model  # TODO:
+from src.rl.utils import save_model  # MODIFIED:
 
-# TODO: Define a random number generator
+# MODIFIED: Define a random number generator
 RNG = np.random.default_rng(1)
 
 
@@ -275,11 +275,9 @@ class AdversarialTrainer(base.DemonstrationAlgorithm[types.Transitions]):
             self.venv,
         )
 
-        # TODO: Model saving
-        self.ts_now = datetime.now().strftime(
-            "%Y-%m-%d_%H-%M-%S"
-        )  # Ts for model saving
-        self.save_path = os.path.join(os.getcwd(), "models")
+        # MODIFIED: Model saving parameters
+        self.ts_now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        self.save_path = os.path.join(os.getcwd(), "data", "models")
         self.highest_reward = -np.inf
 
     @property
@@ -398,7 +396,7 @@ class AdversarialTrainer(base.DemonstrationAlgorithm[types.Transitions]):
                 loss *= self.demo_minibatch_size / self.demo_batch_size
                 loss.backward()
 
-                # TODO: Update the discriminator
+                # MODIFIED: Update the discriminator
                 self._disc_opt.step()
                 self._disc_opt.zero_grad()
 
@@ -487,10 +485,10 @@ class AdversarialTrainer(base.DemonstrationAlgorithm[types.Transitions]):
             f"total_timesteps={total_timesteps})!"
         )
         for r in tqdm.tqdm(range(0, n_rounds), desc="round"):
-            # TODO: Turn on reward scaling
+            # MODIFIED: Turn on reward scaling
             self._reward_net.scale = True
             self.train_gen(self.gen_train_timesteps)
-            # TODO: Turn off reward scaling
+            # MODIFIED: Turn off reward scaling
             self._reward_net.scale = False
 
             for _ in range(self.n_disc_updates_per_round):
@@ -513,7 +511,7 @@ class AdversarialTrainer(base.DemonstrationAlgorithm[types.Transitions]):
             reward_mean = np.mean(learner_rewards_after_training)
             reward_std = np.std(learner_rewards_after_training)
 
-            # TODO: Save the model
+            # MODIFIED: Save the model
             if r % 10 == 0:
                 stats = self.logger._logger.stats
                 ts_partial = f"{self.ts_now}_{r}"
@@ -657,7 +655,7 @@ class AdversarialTrainer(base.DemonstrationAlgorithm[types.Transitions]):
         expert_samples = dict(expert_samples)
         gen_samples = dict(gen_samples)
 
-        # TODO: Balance expert samples
+        # MODIFIED: Balance expert samples
         acts = expert_samples["acts"]
         obs = expert_samples["obs"]
         next_obs = expert_samples["next_obs"]

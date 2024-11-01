@@ -41,8 +41,8 @@ def save_model(
         path: Path to save the model to.
         ts: Timestamp to include in the file names.
     """
-    if not os.path.exists(path):
-        os.makedirs(path)
+    # Create the directory if it does not exist
+    os.makedirs(path, exist_ok=True)
 
     # Save the learner
     learner.save(f"{path}/{ts}_learner")
