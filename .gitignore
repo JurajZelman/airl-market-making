@@ -156,5 +156,4 @@ results_backtest/
 images/
 models/
 monitor_logs/
-rollouts/
 automated_backtests/

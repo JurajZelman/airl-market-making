@@ -31,6 +31,7 @@ class LimitOrderBookGym(gym.Env):
         deterministic: bool,
         win: int,
         path: str,
+        path_vol_distr: str,
         rl_trader_id: str,
         latency_comp_params: dict,
         logging: bool,
@@ -56,6 +57,8 @@ class LimitOrderBookGym(gym.Env):
                 start and end timestamps of the desired length.
             win: Window size for features.
             path: Path to the directory containing the datasets.
+            path_vol_distr: Path to the directory containing the distributions
+                for the EmpiricalOrderVolumeDistribution.
             rl_trader_id: ID of the RL trader.
             latency_comp_params: Parameters for the latency compensation model.
                 Each number represents the level of the order book to from which
@@ -79,6 +82,7 @@ class LimitOrderBookGym(gym.Env):
         self.deterministic = deterministic
         self.win = win
         self.path = path
+        self.path_vol_distr = path_vol_distr
         self.rl_trader_id = rl_trader_id
         self.latency_comp_params = latency_comp_params
         self.logging = logging
@@ -128,6 +132,7 @@ class LimitOrderBookGym(gym.Env):
             ts_end=self.ts_end,
             win=self.win,
             path=self.path,
+            path_vol_distr=self.path_vol_distr,
             rl_trader_id=self.rl_trader_id,
             latency_comp_params=self.latency_comp_params,
             logging=self.logging,

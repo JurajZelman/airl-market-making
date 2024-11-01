@@ -47,6 +47,7 @@ class Exchange:
         ts_end: pd.Timestamp,
         win: int,
         path: str,
+        path_vol_distr: str,
         rl_trader_id: str,
         initialize: bool = True,
         logging: bool = False,
@@ -70,6 +71,8 @@ class Exchange:
             ts_end: End timestamp.
             win: Window size for features.
             path: Path to the directory containing the datasets.
+            path_vol_distr: Path to the directory containing the distributions
+                for the EmpiricalOrderVolumeDistribution.
             rl_trader_id: ID of the RL trader.
             initialize: Indicates whether to process the first step in the
                 simulation. Since RL algorithms need the first observation we
@@ -115,7 +118,9 @@ class Exchange:
         self.rl_trader_id = rl_trader_id
         self.description = description
         self.rng = rng
-        self.sampler = EmpiricalOrderVolumeDistribution(rng=self.rng)
+        self.sampler = EmpiricalOrderVolumeDistribution(
+            path=path_vol_distr, rng=self.rng
+        )
 
         if ts_save is None:
             ts_save = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
