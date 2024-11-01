@@ -9,7 +9,6 @@ import itertools
 from typing import (
     Any,
     Callable,
-    Dict,
     Iterable,
     Iterator,
     Mapping,
@@ -19,17 +18,16 @@ from typing import (
     Union,
 )
 
-import gymnasium as gym
+import gym
 import numpy as np
 import torch as th
 import tqdm
-from stable_baselines3.common import policies, torch_layers, utils, vec_env
-
 from imitation.algorithms import base as algo_base
 from imitation.data import rollout, types
 from imitation.policies import base as policy_base
 from imitation.util import logger as imit_logger
 from imitation.util import util
+from stable_baselines3.common import policies, utils, vec_env
 
 
 @dataclasses.dataclass(frozen=True)
@@ -39,7 +37,7 @@ class BatchIteratorWithEpochEndCallback:
     Will throw an exception when an epoch contains no batches.
     """
 
-    batch_loader: Iterable[types.TransitionMapping]
+    batch_loader: Iterable[algo_base.TransitionMapping]
     n_epochs: Optional[int]
     n_batches: Optional[int]
     on_epoch_end: Optional[Callable[[int], None]]
@@ -56,8 +54,8 @@ class BatchIteratorWithEpochEndCallback:
                 "Must provide exactly one of `n_epochs` and `n_batches` arguments.",
             )
 
-    def __iter__(self) -> Iterator[types.TransitionMapping]:
-        def batch_iterator() -> Iterator[types.TransitionMapping]:
+    def __iter__(self) -> Iterator[algo_base.TransitionMapping]:
+        def batch_iterator() -> Iterator[algo_base.TransitionMapping]:
             # Note: the islice here ensures we do not exceed self.n_epochs
             for epoch_num in itertools.islice(itertools.count(), self.n_epochs):
                 some_batch_was_yielded = False
@@ -100,12 +98,7 @@ class BehaviorCloningLossCalculator:
     def __call__(
         self,
         policy: policies.ActorCriticPolicy,
-        obs: Union[
-            types.AnyTensor,
-            types.DictObs,
-            Dict[str, np.ndarray],
-            Dict[str, th.Tensor],
-        ],
+        obs: Union[th.Tensor, np.ndarray],
         acts: Union[th.Tensor, np.ndarray],
     ) -> BCTrainingMetrics:
         """Calculate the supervised learning loss used to train the behavioral clone.
@@ -119,28 +112,23 @@ class BehaviorCloningLossCalculator:
             A BCTrainingMetrics object with the loss and all the components it
             consists of.
         """
-        tensor_obs = types.map_maybe_dict(
-            util.safe_to_tensor,
-            types.maybe_unwrap_dictobs(obs),
-        )
+        obs = util.safe_to_tensor(obs)
         acts = util.safe_to_tensor(acts)
-
-        # policy.evaluate_actions's type signatures are incorrect.
-        # See https://github.com/DLR-RM/stable-baselines3/issues/1679
-        (_, log_prob, entropy) = policy.evaluate_actions(
-            tensor_obs,  # type: ignore[arg-type]
-            acts,
-        )
+        _, log_prob, entropy = policy.evaluate_actions(obs, acts)
         prob_true_act = th.exp(log_prob).mean()
         log_prob = log_prob.mean()
         entropy = entropy.mean() if entropy is not None else None
 
         l2_norms = [th.sum(th.square(w)) for w in policy.parameters()]
-        l2_norm = sum(l2_norms) / 2  # divide by 2 to cancel with gradient of square
+        l2_norm = (
+            sum(l2_norms) / 2
+        )  # divide by 2 to cancel with gradient of square
         # sum of list defaults to float(0) if len == 0.
         assert isinstance(l2_norm, th.Tensor)
 
-        ent_loss = -self.ent_weight * (entropy if entropy is not None else th.zeros(1))
+        ent_loss = -self.ent_weight * (
+            entropy if entropy is not None else th.zeros(1)
+        )
         neglogp = -log_prob
         l2_loss = self.l2_weight * l2_norm
         loss = neglogp + ent_loss + l2_loss
@@ -157,8 +145,8 @@ class BehaviorCloningLossCalculator:
 
 
 def enumerate_batches(
-    batch_it: Iterable[types.TransitionMapping],
-) -> Iterable[Tuple[Tuple[int, int, int], types.TransitionMapping]]:
+    batch_it: Iterable[algo_base.TransitionMapping],
+) -> Iterable[Tuple[Tuple[int, int, int], algo_base.TransitionMapping]]:
     """Prepends batch stats before the batches of a batch iterator."""
     num_samples_so_far = 0
     for num_batches, batch in enumerate(batch_it):
@@ -322,10 +310,12 @@ class BC(algo_base.DemonstrationAlgorithm):
                 parameter `l2_weight` instead), or if the batch size is not a multiple
                 of the minibatch size.
         """
-        self._demo_data_loader: Optional[Iterable[types.TransitionMapping]] = None
+        self._demo_data_loader: Optional[
+            Iterable[algo_base.TransitionMapping]
+        ] = None
         self.batch_size = batch_size
         self.minibatch_size = minibatch_size or batch_size
-        if self.batch_size % self.minibatch_size != 0:  # pragma: no cover
+        if self.batch_size % self.minibatch_size != 0:
             raise ValueError("Batch size must be a multiple of minibatch size.")
         super().__init__(
             demonstrations=demonstrations,
@@ -339,18 +329,12 @@ class BC(algo_base.DemonstrationAlgorithm):
         self.rng = rng
 
         if policy is None:
-            extractor = (
-                torch_layers.CombinedExtractor
-                if isinstance(observation_space, gym.spaces.Dict)
-                else torch_layers.FlattenExtractor
-            )
             policy = policy_base.FeedForward32Policy(
                 observation_space=observation_space,
                 action_space=action_space,
                 # Set lr_schedule to max value to force error if policy.optimizer
                 # is used by mistake (should use self.optimizer instead).
                 lr_schedule=lambda _: th.finfo(th.float32).max,
-                features_extractor_class=extractor,
             )
         self._policy = policy.to(utils.get_device(device))
         # TODO(adam): make policy mandatory and delete observation/action space params?
@@ -358,21 +342,42 @@ class BC(algo_base.DemonstrationAlgorithm):
         assert self.policy.action_space == self.action_space
 
         if optimizer_kwargs:
-            if "weight_decay" in optimizer_kwargs:  # pragma: no cover
-                raise ValueError("Use the parameter l2_weight instead of weight_decay.")
+            if "weight_decay" in optimizer_kwargs:
+                raise ValueError(
+                    "Use the parameter l2_weight instead of weight_decay."
+                )
         optimizer_kwargs = optimizer_kwargs or {}
         self.optimizer = optimizer_cls(
             self.policy.parameters(),
             **optimizer_kwargs,
         )
 
-        self.loss_calculator = BehaviorCloningLossCalculator(ent_weight, l2_weight)
+        self.loss_calculator = BehaviorCloningLossCalculator(
+            ent_weight, l2_weight
+        )
+
+        # MODIFIED: My custom modification for storing training data
+        self.train_logger = {
+            "batch_num": [],
+            "minibatch_size": [],
+            "num_samples_so_far": [],
+            "neglogp": [],
+            "entropy": [],
+            "ent_loss": [],
+            "prob_true_act": [],
+            "l2_norm": [],
+            "l2_loss": [],
+            "loss": [],
+            # "rollout_stats": [],
+        }
 
     @property
     def policy(self) -> policies.ActorCriticPolicy:
         return self._policy
 
-    def set_demonstrations(self, demonstrations: algo_base.AnyTransitions) -> None:
+    def set_demonstrations(
+        self, demonstrations: algo_base.AnyTransitions
+    ) -> None:
         self._demo_data_loader = algo_base.make_data_loader(
             demonstrations,
             self.minibatch_size,
@@ -431,7 +436,9 @@ class BC(algo_base.DemonstrationAlgorithm):
 
         def _on_epoch_end(epoch_number: int):
             if tqdm_progress_bar is not None:
-                total_num_epochs_str = f"of {n_epochs}" if n_epochs is not None else ""
+                total_num_epochs_str = (
+                    f"of {n_epochs}" if n_epochs is not None else ""
+                )
                 tqdm_progress_bar.display(
                     f"Epoch {epoch_number} {total_num_epochs_str}",
                     pos=1,
@@ -441,7 +448,9 @@ class BC(algo_base.DemonstrationAlgorithm):
                 on_epoch_end()
 
         mini_per_batch = self.batch_size // self.minibatch_size
-        n_minibatches = n_batches * mini_per_batch if n_batches is not None else None
+        n_minibatches = (
+            n_batches * mini_per_batch if n_batches is not None else None
+        )
 
         assert self._demo_data_loader is not None
         demonstration_batches = BatchIteratorWithEpochEndCallback(
@@ -468,13 +477,41 @@ class BC(algo_base.DemonstrationAlgorithm):
             if batch_num % log_interval == 0:
                 rollout_stats = compute_rollout_stats(self.policy, self.rng)
 
-                self._bc_logger.log_batch(
-                    batch_num,
-                    minibatch_size,
-                    num_samples_so_far,
-                    training_metrics,
-                    rollout_stats,
+                # MODIFIED: Disable logging
+                # self._bc_logger.log_batch(
+                #     batch_num,
+                #     minibatch_size,
+                #     num_samples_so_far,
+                #     training_metrics,
+                #     rollout_stats,
+                # )
+
+                # MODIFIED: Test (process statistics)
+                self.train_logger["batch_num"].append(batch_num)
+                self.train_logger["minibatch_size"].append(minibatch_size)
+                self.train_logger["num_samples_so_far"].append(
+                    num_samples_so_far
                 )
+                self.train_logger["neglogp"].append(
+                    training_metrics.neglogp.item()
+                )
+                self.train_logger["entropy"].append(
+                    training_metrics.entropy.item()
+                )
+                self.train_logger["ent_loss"].append(
+                    training_metrics.ent_loss.item()
+                )
+                self.train_logger["prob_true_act"].append(
+                    training_metrics.prob_true_act.item()
+                )
+                self.train_logger["l2_norm"].append(
+                    training_metrics.l2_norm.item()
+                )
+                self.train_logger["l2_loss"].append(
+                    training_metrics.l2_loss.item()
+                )
+                self.train_logger["loss"].append(training_metrics.loss.item())
+                # self.train_logger["rollout_stats"].append(rollout_stats)
 
             if on_batch_end is not None:
                 on_batch_end()
@@ -485,14 +522,11 @@ class BC(algo_base.DemonstrationAlgorithm):
             minibatch_size,
             num_samples_so_far,
         ), batch in batches_with_stats:
-            obs_tensor: Union[th.Tensor, Dict[str, th.Tensor]]
-            # unwraps the observation if it's a dictobs and converts arrays to tensors
-            obs_tensor = types.map_maybe_dict(
-                lambda x: util.safe_to_tensor(x, device=self.policy.device),
-                types.maybe_unwrap_dictobs(batch["obs"]),
-            )
-            acts = util.safe_to_tensor(batch["acts"], device=self.policy.device)
-            training_metrics = self.loss_calculator(self.policy, obs_tensor, acts)
+            obs = th.as_tensor(batch["obs"], device=self.policy.device).detach()
+            acts = th.as_tensor(
+                batch["acts"], device=self.policy.device
+            ).detach()
+            training_metrics = self.loss_calculator(self.policy, obs, acts)
 
             # Renormalise the loss to be averaged over the whole
             # batch size instead of the minibatch size.
@@ -508,3 +542,11 @@ class BC(algo_base.DemonstrationAlgorithm):
             # if there remains an incomplete batch
             batch_num += 1
             process_batch()
+
+    def save_policy(self, policy_path: types.AnyPath) -> None:
+        """Save policy to a path. Can be reloaded by `.reconstruct_policy()`.
+
+        Args:
+            policy_path: path to save policy to.
+        """
+        th.save(self.policy, util.parse_path(policy_path))
