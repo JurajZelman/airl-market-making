@@ -1,18 +1,18 @@
 """Implementations of market participants."""
 
-import datetime
 import math
 import pickle
 from abc import ABC, abstractmethod
+from datetime import datetime
 from typing import Any, TypeVar
 
 import numpy as np
 import polars as pl
 
-from lob.commissions import CommissionModel
-from lob.limit_order_book import LimitOrderBook
-from lob.orders import LimitOrder, MarketOrder, Order
-from lob.utils import get_rnd_str, round_to_lot, round_to_tick
+from src.lob.commissions import CommissionModel
+from src.lob.limit_order_book import LimitOrderBook
+from src.lob.orders import LimitOrder, MarketOrder, Order
+from src.lob.utils import get_rnd_str, round_to_lot, round_to_tick
 
 ActType = TypeVar("ActType")
 ObsType = TypeVar("ObsType")
@@ -52,6 +52,8 @@ class Trader(ABC):
 
         Args:
             time_step: Current time step.
+            *args: Additional arguments.
+            **kwargs: Additional keyword arguments.
 
         Returns:
             Tuple of lists of orders to cancel and add.
@@ -310,12 +312,15 @@ class PureMarketMaker(Trader):
             "quoted_ask_volume": [],
         }
 
-    def place_orders(self, time_step: int, timestamp) -> tuple[list, list]:
+    def place_orders(
+        self, time_step: int, timestamp: datetime
+    ) -> tuple[list, list]:
         """
         Create lists of orders to be canceled and added to the lob.
 
         Args:
             time_step: Current time step.
+            timestamp: Current timestamp.
 
         Returns:
             Tuple of lists of orders to cancel and add.
@@ -559,7 +564,7 @@ class AvellanedaStoikov(Trader):
         }
 
     def place_orders(
-        self, time_step: int, timestamp: datetime.datetime, last_time_step: int
+        self, time_step: int, timestamp: datetime, last_time_step: int
     ) -> tuple[list, list]:
         """
         Create lists of orders to be canceled and added to the lob.

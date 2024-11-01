@@ -6,7 +6,7 @@ import gymnasium as gym
 import numpy as np
 
 
-class RandomPolicy_v1:
+class RandomPolicyV1:
     """Random policy for the v1 problem."""
 
     def __init__(self, action_space: gym.spaces.Space) -> None:
@@ -34,7 +34,7 @@ class RandomPolicy_v1:
         return np.array([self.action_space.sample()]), state
 
 
-class ExpertPolicy_v1:
+class ExpertPolicyV1:
     """Expert policy for the v1 problem."""
 
     def __init__(self) -> None:

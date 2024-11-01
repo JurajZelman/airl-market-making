@@ -2,8 +2,8 @@
 
 from pyllist import dllist, dllistnode
 
-from lob.orders import Order
-from lob.utils import round_to_lot
+from src.lob.orders import Order
+from src.lob.utils import round_to_lot
 
 
 class OrderQueue:

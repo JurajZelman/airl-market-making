@@ -7,8 +7,8 @@ import gymnasium as gym
 import numpy as np
 from gymnasium.spaces import Box, Discrete
 
-from lob.exchange import Exchange
-from rl.utils import random_timestamp
+from src.lob.exchange import Exchange
+from src.rl.utils import random_timestamp
 
 ObsType = TypeVar("ObsType")
 ActType = TypeVar("ActType")

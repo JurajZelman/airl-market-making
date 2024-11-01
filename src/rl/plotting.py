@@ -1,6 +1,5 @@
 """Methods for plotting and monitoring."""
 
-
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.gridspec import GridSpec
@@ -13,9 +12,9 @@ def visualize_bc_train_stats(train_stats: dict):
     Args:
         train_stats: Training statistics.
     """
-    FIGSIZE = (12, 18)
+    figsize = (12, 18)
 
-    fig = plt.figure(figsize=FIGSIZE)
+    fig = plt.figure(figsize=figsize)
     gs = GridSpec(4, 2, figure=fig)
 
     ax1 = plt.subplot(gs[0, 0])
@@ -71,13 +70,13 @@ def visualize_airl_train_stats(
         train_stats: Training statistics.
         save_fig: Whether to save figures.
     """
-    FIGSIZE_DISC = (12, 18)
-    FIGSIZE_GEN = (12, 18)
+    figsize_disc = (12, 18)
+    figsize_gen = (12, 18)
 
     # --------------------------------------------------
     # Discriminator plot
     # --------------------------------------------------
-    fig = plt.figure(figsize=FIGSIZE_DISC)
+    fig = plt.figure(figsize=figsize_disc)
     gs = GridSpec(4, 2, figure=fig)
 
     ax1 = fig.add_subplot(gs[0, :])
@@ -123,7 +122,7 @@ def visualize_airl_train_stats(
     # --------------------------------------------------
     # Generator plot
     # --------------------------------------------------
-    fig = plt.figure(figsize=FIGSIZE_GEN)
+    fig = plt.figure(figsize=figsize_gen)
     gs = GridSpec(4, 2, figure=fig)
 
     ax1 = fig.add_subplot(gs[0, :])

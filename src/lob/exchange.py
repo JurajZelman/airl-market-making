@@ -11,18 +11,21 @@ import pandas as pd
 import polars as pl
 from tqdm import tqdm
 
-from lob.data import scan_parquet
-from lob.distributions import EmpiricalOrderVolumeDistribution
-from lob.limit_order_book import LimitOrderBook
-from lob.orders import Order
-from lob.time import TimeManager
-from lob.traders import ExchangeTrader, Trader
-from lob.utils import get_rnd_str
+from src.lob.data import scan_parquet
+from src.lob.distributions import EmpiricalOrderVolumeDistribution
+from src.lob.limit_order_book import LimitOrderBook
+from src.lob.orders import Order
+from src.lob.time import TimeManager
+from src.lob.traders import ExchangeTrader, Trader
+from src.lob.utils import get_rnd_str
 
 ObsType = TypeVar("ObsType")
 ActType = TypeVar("ActType")
 
 pl.enable_string_cache()  # Fix polars issues
+
+DEFAULT_LATENCY_COMP_PARAMS = {}
+DEFAULT_RNG = np.random.default_rng(seed=42)
 
 
 class Exchange:
@@ -47,10 +50,10 @@ class Exchange:
         rl_trader_id: str,
         initialize: bool = True,
         logging: bool = False,
-        latency_comp_params: dict = {},
+        latency_comp_params: dict = DEFAULT_LATENCY_COMP_PARAMS,
         ts_save: datetime = None,
         description: str = "",
-        rng: np.random.Generator = np.random.default_rng(seed=42),
+        rng: np.random.Generator = DEFAULT_RNG,
     ) -> None:
         """
         Initialize an exchange simulator.

@@ -4,7 +4,8 @@ import os
 
 import pandas as pd
 import polars as pl
-from lob.time import TimeManager
+
+from src.lob.time import TimeManager
 
 
 def scan_parquet(

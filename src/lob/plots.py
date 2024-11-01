@@ -6,8 +6,9 @@ from typing import Union
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib.ticker import MultipleLocator
 
-from lob.backtest_metrics import drawdowns
+from src.lob.backtest_metrics import drawdowns
 
 COLOR_GREEN = "#13961a"
 COLOR_RED = "#eb5c14"
@@ -23,17 +24,20 @@ def set_plot_style() -> None:
     plt.rcParams.update({"font.family": "cmr10", "font.size": 12})
     plt.rcParams.update({"axes.formatter.use_mathtext": True})
 
-    SMALL_SIZE = 16
-    MEDIUM_SIZE = 18
-    BIGGER_SIZE = 20
+    # small_size = 16
+    # medium_size = 18
+    # bigger_size = 20
+    small_size = 20
+    medium_size = 22
+    bigger_size = 24
 
-    plt.rc("font", size=SMALL_SIZE)  # controls default text sizes
-    plt.rc("axes", titlesize=SMALL_SIZE)  # fontsize of the axes title
-    plt.rc("axes", labelsize=MEDIUM_SIZE)  # fontsize of the x and y labels
-    plt.rc("xtick", labelsize=SMALL_SIZE)  # fontsize of the tick labels
-    plt.rc("ytick", labelsize=SMALL_SIZE)  # fontsize of the tick labels
-    plt.rc("legend", fontsize=SMALL_SIZE)  # legend fontsize
-    plt.rc("figure", titlesize=BIGGER_SIZE)  # fontsize of the figure title
+    plt.rc("font", size=small_size)  # controls default text sizes
+    plt.rc("axes", titlesize=small_size)  # fontsize of the axes title
+    plt.rc("axes", labelsize=medium_size)  # fontsize of the x and y labels
+    plt.rc("xtick", labelsize=small_size)  # fontsize of the tick labels
+    plt.rc("ytick", labelsize=small_size)  # fontsize of the tick labels
+    plt.rc("legend", fontsize=small_size)  # legend fontsize
+    plt.rc("figure", titlesize=bigger_size)  # fontsize of the figure title
 
 
 def visualize_backtest(
@@ -172,14 +176,18 @@ def make_plot(
         title: Title of the plot.
         xlabel: Label of the x-axis.
         ylabel: Label of the y-axis.
+        ylim: Limits of the y-axis.
         legend: Whether to show the legend.
         figsize: Size of the figure.
         color: Color of the plot.
+        save_path: Path to save the plot.
     """
     default_color = plt.rcParams["axes.prop_cycle"].by_key()["color"][0]
     color = color if color else default_color
     plt.figure(figsize=figsize)
     plt.plot(x, y, color=color)
+    # Show every 5th label
+    plt.gca().xaxis.set_major_locator(MultipleLocator(3))
     if xlabel:
         plt.xlabel(xlabel)
     if ylabel:
@@ -203,7 +211,7 @@ def make_drawdown_plot(
     xlabel: str = None,
     ylabel: str = None,
     legend: bool = False,
-    figsize: tuple = (12, 5),
+    figsize: tuple = (12, 4.5),
     save_path: str = None,
 ) -> None:
     """
@@ -217,10 +225,12 @@ def make_drawdown_plot(
         ylabel: Label of the y-axis.
         legend: Whether to show the legend.
         figsize: Size of the figure.
+        save_path: Path to save the plot.
     """
     plt.figure(figsize=figsize)
     plt.fill_between(x, y, 0, color="red", alpha=0.3)
     plt.plot(x, y, color="red", alpha=0.5)
+    plt.gca().xaxis.set_major_locator(MultipleLocator(3))
     if xlabel:
         plt.xlabel(xlabel)
     if ylabel:

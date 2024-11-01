@@ -147,7 +147,7 @@ def drawdowns(equity: pd.Series) -> pd.Series:
     Compute the drawdowns of a strategy. Values are expressed in percentage.
 
     Args:
-        pnl: Profit and loss of the strategy.
+        equity: Equity curve of the strategy.
 
     Returns:
         A DataFrame containing the wealth index and the previous peaks.
@@ -163,7 +163,7 @@ def max_drawdown(equity: pd.Series) -> float:
     percentage.
 
     Args:
-        pnl: Profit and loss of the strategy.
+        equity: Equity curve of the strategy.
 
     Returns:
         The maximum drawdown.
@@ -179,7 +179,7 @@ def max_drawdown_duration(equity: pd.Series) -> float:
     number of time steps.
 
     Args:
-        pnl: Profit and loss of the strategy.
+        equity: Equity curve of the strategy.
 
     Returns:
         The maximum drawdown duration in the number of time steps.

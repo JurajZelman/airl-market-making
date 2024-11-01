@@ -1,6 +1,5 @@
 """Reward networks and reward functions."""
 
-
 import gymnasium as gym
 import torch as th
 from imitation.rewards.reward_nets import RewardNet

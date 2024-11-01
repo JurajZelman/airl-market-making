@@ -20,14 +20,15 @@ class EmpiricalOrderVolumeDistribution:
         Args:
             rng: Numpy random generator.
         """
+        base_path = os.path.join(os.getcwd(), "distributions")
         self.vols_level_0 = pd.read_pickle(
-            os.path.join(os.getcwd(), "distributions", "volumes_level_0.pkl")
+            os.path.join(base_path, "volumes_level_0.pkl")
         ).to_numpy()
         self.vols_level_1 = pd.read_pickle(
-            os.path.join(os.getcwd(), "distributions", "volumes_level_1.pkl")
+            os.path.join(base_path, "volumes_level_1.pkl")
         ).to_numpy()
         self.vols_level_2 = pd.read_pickle(
-            os.path.join(os.getcwd(), "distributions", "volumes_level_2.pkl")
+            os.path.join(base_path, "volumes_level_2.pkl")
         ).to_numpy()
         self.rng = rng
 

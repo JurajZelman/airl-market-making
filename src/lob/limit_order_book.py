@@ -12,10 +12,10 @@ import pyarrow.parquet as pq
 from pyllist import dllistnode
 from sortedcontainers import SortedDict
 
-from lob.order_queue import OrderQueue
-from lob.orders import Order
-from lob.plots import set_plot_style
-from lob.utils import ensure_dir_exists, round_to_lot, round_to_tick
+from src.lob.order_queue import OrderQueue
+from src.lob.orders import Order
+from src.lob.plots import set_plot_style
+from src.lob.utils import ensure_dir_exists, round_to_lot, round_to_tick
 
 
 class LimitOrderBook:
@@ -489,7 +489,7 @@ class LimitOrderBook:
         """Returns the median of the mid price history."""
         return sorted(self.mid_price_history)[len(self.mid_price_history) // 2]
 
-    def get_VAMP(self, q: float, max_depth: int = 10) -> float:
+    def get_vamp(self, q: float, max_depth: int = 10) -> float:
         """
         Get volume adjusted mid price, suggested by Stoikov and Covario. They
         suggest the difference between the VAMP and the mid price as a good
@@ -502,9 +502,9 @@ class LimitOrderBook:
         """
         if self.best_bid_price is None or self.best_ask_price is None:
             return None
-        return (self.get_VABP(q, max_depth) + self.get_VAAP(q, max_depth)) / 2
+        return (self.get_vabp(q, max_depth) + self.get_vaap(q, max_depth)) / 2
 
-    def get_VABP(self, q: float, max_depth: int = 10) -> float:
+    def get_vabp(self, q: float, max_depth: int = 10) -> float:
         """
         Get volume adjusted bid price (Stoikov, Covario). The VABP is defined as
         the weighted average of the bid prices, where the weights are the
@@ -522,7 +522,7 @@ class LimitOrderBook:
         volumes = [self.get_volume_at_price(bid) for bid in bids]
         return sum(bids[i] * volumes[i] for i in range(len(bids))) / q
 
-    def get_VAAP(self, q: float, max_depth: int = 10) -> float:
+    def get_vaap(self, q: float, max_depth: int = 10) -> float:
         """
         Get volume adjusted ask price (Stoikov, Covario). The VAAP is defined as
         the weighted average of the ask prices, where the weights are the

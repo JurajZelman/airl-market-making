@@ -53,7 +53,10 @@ select = [
 ignore = [
     "C901",  # too complex
     "W191",  # indentation contains tabs
-    "D401"   # imperative mood
+    "D205",  # blank line before summary
+    "D212",  # multi-line docstring summary should start at the second line
+    "D401",  # imperative mood
+
 ]
 
 [tool.ruff.lint.pydocstyle]
