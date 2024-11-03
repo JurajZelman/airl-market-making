@@ -10,12 +10,14 @@ The full training pipeline can be found in [`main.ipynb`](main.ipynb).
 - [x] Ensure the reproducibility of the environment with modified packages.
 - [x] Organize all modules under the `src` directory.
 - [x] Update the title image.
-- [ ] Data download pipeline.
+- [x] Data download pipeline.
 - [x] Data cleaning pipeline.
 - [x] Generation of volume distributions.
 - [x] Generation of rollouts.
 - [ ] Backtest results pipeline.
 - [ ] Remove unnecessary codes and files.
+- [ ] Add PRINT constant.
+- [ ] Add Appendix section to the notebook with data analysis.
 - [ ] Update the README with the new structure.
 - [ ] Add appendix with additional results?
 - [ ] Add the link to the paper.

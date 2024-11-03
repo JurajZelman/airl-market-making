@@ -155,6 +155,7 @@ logs/
 results_backtest/
 images/
 monitor_logs/
+.lake_cache/
 
 # TODO: Ignore temporarily before the repo is fully updated
 to_be_processed/
