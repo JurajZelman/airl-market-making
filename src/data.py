@@ -59,3 +59,12 @@ def get_parquet_args():
         "coerce_timestamps": "us",  # Coerce timestamps to microseconds
         "allow_truncated_timestamps": True,  # Allow truncated timestamps
     }
+
+
+def get_list_of_dates_between(start_date: datetime, end_date: datetime) -> list:
+    """Generate a list of dates between two dates."""
+    days = [
+        start_date + datetime.timedelta(days=x)
+        for x in range((end_date - start_date).days + 1)
+    ]
+    return days
