@@ -16,7 +16,7 @@ The full training pipeline can be found in [`main.ipynb`](main.ipynb).
 - [x] Generation of rollouts.
 - [ ] Backtest results pipeline.
 - [ ] Remove unnecessary codes and files.
-- [ ] Add PRINT constant.
+- [x] Add PRINT constant.
 - [ ] Add Appendix section to the notebook with data analysis.
 - [ ] Update the README with the new structure.
 - [ ] Add appendix with additional results?
