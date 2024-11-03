@@ -13,7 +13,7 @@ The full training pipeline can be found in [`main.ipynb`](main.ipynb).
 - [ ] Data download pipeline.
 - [x] Data cleaning pipeline.
 - [x] Generation of volume distributions.
-- [ ] Generation of rollouts.
+- [x] Generation of rollouts.
 - [ ] Backtest results pipeline.
 - [ ] Remove unnecessary codes and files.
 - [ ] Update the README with the new structure.
