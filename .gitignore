@@ -155,3 +155,8 @@ logs/
 results_backtest/
 images/
 monitor_logs/
+
+# TODO: Ignore temporarily before the repo is fully updated
+to_be_processed/
+to_be_removed/
+.images/title_image.svg

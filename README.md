@@ -11,8 +11,8 @@ The full training pipeline can be found in [`main.ipynb`](main.ipynb).
 - [x] Organize all modules under the `src` directory.
 - [x] Update the title image.
 - [ ] Data download pipeline.
-- [ ] Data cleaning pipeline.
-- [ ] Generation of volume distributions.
+- [x] Data cleaning pipeline.
+- [x] Generation of volume distributions.
 - [ ] Generation of rollouts.
 - [ ] Backtest results pipeline.
 - [ ] Remove unnecessary codes and files.
