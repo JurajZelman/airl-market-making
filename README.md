@@ -14,14 +14,16 @@ The full training pipeline can be found in [`main.ipynb`](main.ipynb).
 - [x] Data cleaning pipeline.
 - [x] Generation of volume distributions.
 - [x] Generation of rollouts.
-- [ ] Backtest results pipeline.
-- [ ] Remove unnecessary codes and files.
 - [x] Add PRINT constant.
 - [ ] Add Appendix section to the notebook with data analysis.
+- [ ] Add description to the appendix section.
+- [ ] Upload the saved models.
+- [ ] Update the model evaluation section.
+- [ ] Process backtest automation and visualization scripts.
 - [ ] Update the README with the new structure.
 - [ ] Add appendix with additional results?
 - [ ] Add the link to the paper.
-- [ ] Upload the saved models.
+- [ ] Remove unnecessary codes and files.
 - [ ] Update the documentation (installation, repository description, modified packages, training details, strategy limitations, etc.).
 
 ## Abstract

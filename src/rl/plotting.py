@@ -24,7 +24,6 @@ def visualize_bc_train_stats(train_stats: dict):
     ax5 = plt.subplot(gs[2, 0])
     ax6 = plt.subplot(gs[2, 1])
     ax7 = plt.subplot(gs[3, 0])
-    # ax8 = plt.subplot(gs[3, 1])
 
     x = train_stats["num_samples_so_far"]
 
@@ -164,6 +163,7 @@ def visualize_airl_train_stats(
 
     fig.tight_layout()
     # fig.show()
+
     # Save figure
     if save_fig:
         fig.savefig("images/gen_train_stats.pdf")
