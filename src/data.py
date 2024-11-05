@@ -26,7 +26,7 @@ def download_data(
     """
     # Check the type
     if data_type not in ["book", "trades"]:
-        raise ValueError("Invalid type. Must be either 'book' or 'trade'.")
+        raise ValueError("Invalid type. Must be either 'book' or 'trades'.")
 
     # Get the parquet arguments
     parquet_args = get_parquet_args()
