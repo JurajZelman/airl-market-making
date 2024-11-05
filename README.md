@@ -15,10 +15,10 @@ The full training pipeline can be found in [`main.ipynb`](main.ipynb).
 - [x] Generation of volume distributions.
 - [x] Generation of rollouts.
 - [x] Add PRINT constant.
-- [ ] Add Appendix section to the notebook with data analysis.
-- [ ] Add description to the appendix section.
+- [x] Update the model evaluation section.
+- [x] Add Appendix section to the notebook with data analysis.
+- [ ] Cleanup the Appendix section and add descriptions.
 - [ ] Upload the saved models.
-- [ ] Update the model evaluation section.
 - [ ] Process backtest automation and visualization scripts.
 - [ ] Update the README with the new structure.
 - [ ] Add appendix with additional results?
