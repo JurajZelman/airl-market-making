@@ -26,6 +26,7 @@ The full training pipeline can be found in [`main.ipynb`](main.ipynb).
 - [ ] Add the link to the paper.
 - [ ] Remove unnecessary codes and files.
 - [ ] Update the documentation (installation, repository description, modified packages, training details, strategy limitations, etc.).
+- [ ] License?
 
 ## Abstract
 

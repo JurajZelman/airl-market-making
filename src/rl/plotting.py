@@ -116,7 +116,7 @@ def visualize_airl_train_stats(
 
     fig.tight_layout()
     if save_fig:
-        fig.savefig("images/disc_train_stats.pdf")
+        fig.savefig("figures/disc_train_stats.pdf")
 
     # --------------------------------------------------
     # Generator plot
@@ -166,7 +166,7 @@ def visualize_airl_train_stats(
 
     # Save figure
     if save_fig:
-        fig.savefig("images/gen_train_stats.pdf")
+        fig.savefig("figures/gen_train_stats.pdf")
 
     fig = plt.figure(figsize=(12, 4))
     plt.plot(train_stats["mean/gen/rollout/ep_rew_mean"])
@@ -174,4 +174,4 @@ def visualize_airl_train_stats(
     plt.ylim(0, 310)
     plt.title("Mean episode reward")
     if save_fig:
-        fig.savefig("images/mean_ep_rew.pdf")
+        fig.savefig("figures/mean_ep_rew.pdf")
