@@ -17,10 +17,10 @@ The full training pipeline can be found in [`main.ipynb`](main.ipynb).
 - [x] Add PRINT constant.
 - [x] Update the model evaluation section.
 - [x] Add Appendix section to the notebook with data analysis.
-- [ ] Process the backtest automation script.
-- [ ] Process the backtest visualization script.
+- [x] Process the backtest automation script.
+- [x] Process the backtest visualization script.
 - [ ] Upload the saved models.
-- [ ] Cleanup the Appendix section and add descriptions.
+- [ ] Cleanup the main notebook and add detailed descriptions.
 - [ ] Update the README with the new structure.
 - [ ] Add appendix pdf with additional results?
 - [ ] Add the link to the paper.
