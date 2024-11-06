@@ -25,14 +25,11 @@ In this paper, we propose a novel application of the Adversarial Inverse Reinfor
 - [x] Process the backtest visualization script.
 - [x] Upload the saved models.
 - [ ] Cleanup the main notebook and add detailed descriptions.
-- [ ] Update the README with the new structure.
-- [ ] Add the link to the paper.
-- [ ] Remove unnecessary codes and files.
 - [ ] Update the documentation (installation, repository description, modified packages, training details, strategy limitations, etc.).
+- [ ] Remove unnecessary codes and files.
 - [ ] Add appendix pdf with additional results?
+- [ ] Add the link to the paper.
 - [ ] License?
-
-
 
 ## Disclaimer
 
