@@ -1,6 +1,6 @@
 ![Adversarial Inverse Reinforcement Learning for Market Making](.images/title_image.png)
 
-This repository contains the code for the paper *Adversarial Inverse Reinforcement Learning* [[arxiv](), [ACM]()] published in the proceedings of the [ICAIF'24](https://ai-finance.org/) conference. The full authors list:  Juraj Zelman ([Richfox Capital](https://www.richfox.com/) &  [ETH Zürich](https://math.ethz.ch/)), Martin Stefanik (Richfox Capital &  ETH Zürich), Moritz Weiß (ETH Zürich) and Prof. Dr. Josef Teichmann (ETH Zürich).
+This repository contains the code for the paper *Adversarial Inverse Reinforcement Learning* [[arxiv](), [ACM]()] published in the proceedings of the [ICAIF'24](https://ai-finance.org/) conference. The full authors list:  Juraj Zelman (Richfox Capital &  ETH Zürich), Martin Stefanik (Richfox Capital &  ETH Zürich), Moritz Weiß (ETH Zürich) and Prof. Dr. Josef Teichmann (ETH Zürich). The links for both affiliations: [Richfox Capital](https://www.richfox.com/) and [ETH Zürich (Dept. of Mathematics)](https://math.ethz.ch/).
 
 The full training pipeline can be found in [`main.ipynb`](main.ipynb).
 
