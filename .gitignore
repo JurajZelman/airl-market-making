@@ -150,7 +150,7 @@ cython_debug/
 *.vsix
 
 # ---------------- Project-specific directories----------------
-data/
+data/pricing/
 logs/
 results_backtest/
 figures/
