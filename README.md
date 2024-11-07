@@ -1,35 +1,12 @@
 ![Adversarial Inverse Reinforcement Learning for Market Making](.images/title_image.png)
 
-This repository contains the code for the paper *Adversarial Inverse Reinforcement Learning* [[arxiv](), [ACM]()] published in the proceedings of the [ICAIF'24](https://ai-finance.org/) conference. The full authors list:  Juraj Zelman (Richfox Capital &  ETH Zürich), Martin Stefanik (Richfox Capital &  ETH Zürich), Moritz Weiß (ETH Zürich) and Prof. Dr. Josef Teichmann (ETH Zürich). The links for both affiliations: [Richfox Capital](https://www.richfox.com/) and [ETH Zürich (Dept. of Mathematics)](https://math.ethz.ch/).
+This repository contains the code for the paper *Adversarial Inverse Reinforcement Learning for Market Making* (2024) [[arxiv](), [ACM]()] by Juraj Zelman (Richfox Capital &  ETH Zürich), Martin Stefanik (Richfox Capital &  ETH Zürich), Moritz Weiß (ETH Zürich) and Prof. Dr. Josef Teichmann (ETH Zürich). The paper was published and presented at the [ICAIF'24](https://ai-finance.org/) conference. The links for both affiliations: [Richfox Capital](https://www.richfox.com/) and [ETH Zürich (Dept. of Mathematics)](https://math.ethz.ch/).
 
 The full training pipeline can be found in [`main.ipynb`](main.ipynb).
 
 ## Abstract
 
 In this paper, we propose a novel application of the Adversarial Inverse Reinforcement Learning (AIRL) algorithm combining the framework of generative adversarial networks and inverse reinforcement learning for automated reward acquisition in the market making problem. We demonstrate that this algorithm can be used to learn a pure market making strategy. An advantage of such an approach is the possibility for further training in the reinforcement learning framework while potentially preserving its explainability and already acquired domain knowledge incorporated in an expert's decision process.
-
-## TODO list
-
-- [x] New poetry setup.
-- [x] Ensure the reproducibility of the environment with modified packages.
-- [x] Organize all modules under the `src` directory.
-- [x] Update the title image.
-- [x] Data download pipeline.
-- [x] Data cleaning pipeline.
-- [x] Generation of volume distributions.
-- [x] Generation of rollouts.
-- [x] Add PRINT constant.
-- [x] Update the model evaluation section.
-- [x] Add Appendix section to the notebook with data analysis.
-- [x] Process the backtest automation script.
-- [x] Process the backtest visualization script.
-- [x] Upload the saved models.
-- [ ] Cleanup the main notebook and add detailed descriptions.
-- [ ] Update the documentation (installation, repository description, modified packages, training details, strategy limitations, etc.).
-- [ ] Remove unnecessary codes and files.
-- [ ] Add appendix pdf with additional results?
-- [ ] Add the link to the paper.
-- [ ] License?
 
 ## Disclaimer
 
