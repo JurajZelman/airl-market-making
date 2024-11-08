@@ -9,8 +9,9 @@ from stable_baselines3.common import preprocessing
 class NegativeRewardNet(RewardNet):
     """
     Simple reward neural network (multi-layer perceptron) that ensures that the
-    reward is always negative. This is needed for the inverse reinforcement
-    learning algorithms to work correctly.
+    reward is always negative. This is needed to ensure that the reward that is
+    passed to the AIRL discriminator makes sense from the theoretical
+    perspective.
     """
 
     def __init__(
@@ -63,9 +64,6 @@ class NegativeRewardNet(RewardNet):
             combined_size += 1
 
         # Define the layers
-        # self.relu = th.nn.ReLU()
-        # self.leaky_relu = th.nn.LeakyReLU()
-        # self.sigmoid = th.nn.Sigmoid()
         self.relu = th.nn.ReLU()
         self.log_sigmoid = th.nn.LogSigmoid()
         self.linear1 = th.nn.Linear(combined_size, 256)
@@ -102,14 +100,12 @@ class NegativeRewardNet(RewardNet):
 
         # Compute the outputs
         outputs = self.linear1(inputs_concat)
-        # outputs = self.sigmoid(outputs)
         outputs = self.relu(outputs)
         outputs = self.linear2(outputs)
-        # outputs = self.sigmoid(outputs)
         outputs = self.relu(outputs)
         outputs = self.linear3(outputs)
         outputs = self.log_sigmoid(outputs)
-        # Cap the reward to -700, enough for machine precision when in exp
+        # Cap the reward to -50, enough for machine precision when in exp
         outputs = th.clamp(outputs, min=-50)
 
         if self.scale:  # Scale [-np.inf, 0] to [-1, 0] for RL training
