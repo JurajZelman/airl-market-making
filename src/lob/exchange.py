@@ -584,17 +584,19 @@ class Exchange:
         """Save the exchange statistics to a pickle file."""
         if self.logging:
             file_name = f"exchange_stats_{self.ts_save}.pkl"
-            with open(os.path.join("results_backtest", file_name), "wb") as f:
+            path = os.path.join("data", "results_backtest", file_name)
+            with open(path, "wb") as f:
                 pickle.dump(self.stats, f)
 
             # Save the trader stats
             for key in self.traders.keys():
                 if key == self.exchange_trader.id:
                     continue
-                path = "results_backtest"
+                path = "data/results_backtest"
                 self.traders[key].save_stats(path, self.ts_save)
 
             # Save the description
             file_name = f"description_{self.ts_save}.txt"
-            with open(os.path.join("results_backtest", file_name), "w") as f:
+            path = os.path.join("data", "results_backtest", file_name)
+            with open(path, "w") as f:
                 f.write(self.description)

@@ -58,7 +58,7 @@ class LimitOrderBook:
         self.log = None
         self.ts = None
         self.mid_price_history = []
-        ensure_dir_exists(os.path.join(os.getcwd(), "results_backtest"))
+        ensure_dir_exists(os.path.join(os.getcwd(), "data", "results_backtest"))
         self.initialize_log()
         set_plot_style()
 
@@ -657,6 +657,7 @@ class LimitOrderBook:
             if self.log_file_name is None:
                 self.log_file_name = os.path.join(
                     os.getcwd(),
+                    "data",
                     "results_backtest",
                     f"log_{self.ts_save}.parquet",
                 )
