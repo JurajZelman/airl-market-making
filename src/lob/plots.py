@@ -3,6 +3,7 @@
 import datetime
 from typing import Union
 
+import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -164,6 +165,7 @@ def make_plot(
     ylim: tuple = None,
     legend: bool = False,
     figsize: tuple = (12, 4.5),
+    loc_interval: int = None,
     color: str = None,
     save_path: str = None,
 ) -> None:
@@ -179,6 +181,7 @@ def make_plot(
         ylim: Limits of the y-axis.
         legend: Whether to show the legend.
         figsize: Size of the figure.
+        loc_interval: Interval of the x-axis labels.
         color: Color of the plot.
         save_path: Path to save the plot.
     """
@@ -199,6 +202,9 @@ def make_plot(
     plt.tight_layout()
     if ylim:
         plt.ylim(ylim)
+    if loc_interval:
+        locator = mdates.DayLocator(interval=loc_interval)
+        plt.gca().xaxis.set_major_locator(locator)
     if save_path:
         plt.savefig(save_path)
     plt.show()
@@ -210,8 +216,10 @@ def make_drawdown_plot(
     title: str = None,
     xlabel: str = None,
     ylabel: str = None,
+    ylim: tuple = None,
     legend: bool = False,
     figsize: tuple = (12, 4.5),
+    loc_interval: int = None,
     save_path: str = None,
 ) -> None:
     """
@@ -223,8 +231,10 @@ def make_drawdown_plot(
         title: Title of the plot.
         xlabel: Label of the x-axis.
         ylabel: Label of the y-axis.
+        ylim: Limits of the y-axis.
         legend: Whether to show the legend.
         figsize: Size of the figure.
+        loc_interval: Interval of the x-axis labels.
         save_path: Path to save the plot.
     """
     plt.figure(figsize=figsize)
@@ -235,11 +245,123 @@ def make_drawdown_plot(
         plt.xlabel(xlabel)
     if ylabel:
         plt.ylabel(ylabel)
+    if ylim:
+        plt.ylim(ylim)
+    if loc_interval:
+        locator = mdates.DayLocator(interval=loc_interval)
+        plt.gca().xaxis.set_major_locator(locator)
     if title:
         plt.title(title)
     if legend:
         plt.legend()
     plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path)
+    plt.show()
+
+
+def plot_multi_results(
+    results: dict,
+    metric: str,
+    ylabel: str,
+    ylim: tuple = None,
+    legend: bool = True,
+    title: str = None,
+    print_stats: bool = True,
+    figsize: tuple = (12, 4.5),
+    locator_interval: int = None,
+    save_path: str = None,
+) -> None:
+    """
+    Generalized function to plot results for a given metric (P&L, volume, etc.)
+    over multiple strategies.
+
+    Args:
+        results: Dictionary containing strategy results with timestamps and
+            trader stats.
+        metric: Metric to plot (e.g., 'adj_pnl', 'total_volume', or 'spread').
+        ylabel: Label for the y-axis.
+        ylim: Limits for the y-axis. Default is None.
+        legend: Whether to show the legend. Default is True.
+        title: Title of the plot. Default is None.
+        print_stats: Whether to print statistics for the given metric. Default
+            is True.
+        figsize: Size of the figure. Default is (12, 4.5).
+        locator_interval: Interval for the x-axis locator. Default is None.
+        save_path: Path to save the plot. Default is None.
+    """
+    plt.figure(figsize=figsize)
+
+    for i, value in enumerate(results.values()):
+        x = value["timestamps"]
+        y = np.array(value["trader_stats"][metric])
+        label = f"PMM (priority {i})"
+        plt.plot(x, y, label=label)
+
+    plt.xlabel("Time")
+    plt.ylabel(ylabel)
+    if ylim:
+        plt.ylim(ylim)
+    if legend:
+        plt.legend()
+    if title:
+        plt.title(title)
+    if locator_interval:
+        locator = mdates.DayLocator(interval=locator_interval)
+        plt.gca().xaxis.set_major_locator(locator)
+    plt.tight_layout()
+
+    # Save the figure if required
+    if save_path:
+        plt.savefig(save_path)
+
+    plt.show()
+
+    if print_stats:
+        # Print the statistics for the given metric
+        print(f"Statistics for {metric}:")
+        for key, value in results.items():
+            y = np.array(value["trader_stats"][metric])
+            print(f"  {key} - Final {metric.replace('_', ' ')}: {y[-1]:.2f}")
+        print()
+
+
+def plot_comparison(
+    x_data_list: list[list],
+    y_data_list: list[list],
+    labels: list[str],
+    xlabel: str,
+    ylabel: str,
+    title: str = None,
+    figsize: tuple = (12, 4.5),
+    save_path: str = None,
+) -> None:
+    """
+    Plot a comparison between multiple time series.
+
+    Args:
+        x_data_list: List of lists containing x-axis values.
+        y_data_list: List of lists containing y-axis values.
+        labels: List of labels for the legend.
+        xlabel: Label for the x-axis.
+        ylabel: Label for the y-axis.
+        title: Title of the plot. Default is None.
+        figsize: Size of the figure. Default is (12, 4.5).
+        save_path: Path to save the plot. Default is None.
+    """
+    plt.figure(figsize=figsize)
+
+    for x, y, label in zip(x_data_list, y_data_list, labels):
+        plt.plot(x, y, label=label)
+
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=1))
+    plt.legend(loc="upper left")
+    if title:
+        plt.title(title)
+    plt.tight_layout()
+
     if save_path:
         plt.savefig(save_path)
     plt.show()
