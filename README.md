@@ -15,7 +15,7 @@ In this paper, we propose a novel application of the Adversarial Inverse Reinfor
 
 ## Installation
 
-In order to run the code, we recommend you to install [`pyenv`](https://github.com/pyenv/pyenv) (for managing Python versions) and [`poetry`](https://python-poetry.org/) (for managing dependencies) or alternative management tools. The project can be then installed in the following way:
+In order to run the code, we recommend you to install [`pyenv`](https://github.com/pyenv/pyenv) (for managing Python versions) and [`poetry`](https://python-poetry.org/) (for managing dependencies) or alternative management tools. The project can be installed as follows:
 
 1. Clone and cd into the repository:
 
