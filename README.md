@@ -11,7 +11,7 @@ This repository contains the code for the paper *Adversarial Inverse Reinforceme
 
 The full training pipeline can be found in [`main.ipynb`](main.ipynb). Beforehand, see the [Installation](#installation) section below.
 
-We hope you will learn something new here and that this project sparks your curiosity to explore reinforcement learning methods, as well as other fields!
+We hope you will learn something new and that this project sparks your curiosity to explore reinforcement learning methods, as well as other related fields!
 
 ## Abstract
 
