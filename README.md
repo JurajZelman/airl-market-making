@@ -7,9 +7,9 @@
 [![Imitation Badge](https://img.shields.io/badge/imitation-v1.0.0-green)](https://imitation.readthedocs.io/en/latest/)
 [![GPL-3.0 License](https://img.shields.io/badge/License-GPL%203.0-green)](https://www.gnu.org/licenses/gpl-3.0)
 
-This repository contains the code for the paper *Adversarial Inverse Reinforcement Learning for Market Making* (2024) [[arxiv](), [ACM]() - both will be added soon] by Juraj Zelman (Richfox Capital &  ETH Zürich), Martin Stefanik (Richfox Capital &  ETH Zürich), Moritz Weiß (ETH Zürich) and Prof. Dr. Josef Teichmann (ETH Zürich). The paper was published and presented at the [ICAIF'24](https://ai-finance.org/) conference. The links for both affiliations: [Richfox Capital](https://www.richfox.com/) and [ETH Zürich (Dept. of Mathematics)](https://math.ethz.ch/).
+This repository contains the code for the paper *Adversarial Inverse Reinforcement Learning for Market Making* (2024) [[arxiv](), [ACM]() - both will be added soon] by Juraj Zelman (Richfox Capital &  ETH Zürich), Martin Stefanik (Richfox Capital &  ETH Zürich), Moritz Weiß (ETH Zürich) and Prof. Dr. Josef Teichmann (ETH Zürich). The paper was published and presented at the [5th ACM International Conference on AI in Finance (ICAIF ’24)](https://ai-finance.org/). The links of both affiliations: [Richfox Capital](https://www.richfox.com/) and [ETH Zürich (Dept. of Mathematics)](https://math.ethz.ch/).
 
-The full training pipeline can be found in [`main.ipynb`](main.ipynb).
+The full training pipeline can be found in [`main.ipynb`](main.ipynb). Beforehand, see the [Installation](#installation) section below. We hope you will learn something new and that the project will encourage you to research reinforcement learning methods in more depth.
 
 ## Abstract
 
@@ -46,14 +46,14 @@ In order to run the code, we recommend you to install [`pyenv`](https://github.c
 
 The repository uses two modified packages located in the [`.packages`](.packages) directory (all modifications are marked with `# MODIFIED` comments). The modifications are as follows:
 
+- [`common.py`](.packages/imitation-1.0.0/src/imitation/algorithms/adversarial/common.py): In this file we implement multiple enhancements that seemed to empirically improve the training process. Firstly, we update perform the discriminator optimization step for every batch of data instead of as an aggregate. Further, we scale the rewards for the PPO (generator) training and implement balancing of expert samples in the training process to improve the stability of the training process. Lastly, we enhance the monitoring of the training statistics.
+- [`utils.py`](.packages/stable_baselines3-2.2.1/stable_baselines3/common/utils.py): Here we add a minor fix to avoid overflow warnings that might sometimes appear during the training process of the PPO algorithm (generator).
 - [`logger.py`](.packages/stable_baselines3-2.2.1/stable_baselines3/common/logger.py): In this file we suppress the logging printouts during the training process.
-- [`utils.py`](.packages/stable_baselines3-2.2.1/stable_baselines3/common/utils.py): Here we add a minor fix to avoid overflow warnings that might sometimes appear during the training process.
-- [`common.py`](.packages/imitation-1.0.0/src/imitation/algorithms/adversarial/common.py): In this file we implement multiple enhancements: reward scaling, balancing of expert samples, and we enhance the monitoring of the training process.
 - [`bc.py`](.packages/imitation-1.0.0/src/imitation/algorithms/bc.py): Lastly, this enhancement of training process monitoring for the behavioral cloning algorithm is an artifact of the initial research and is not used in the final implementation.
 
 ## Contributing
 
-In case you find any bugs or have any suggestions for improvements, feel free to open an issue or a pull request.
+In case you find any bugs, have any suggestions for improvements or have any questions, feel free to open an issue or a pull request. I am happy to help and discuss any potential improvements.
 
 ## Disclaimer
 
