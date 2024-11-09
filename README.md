@@ -9,7 +9,9 @@
 
 This repository contains the code for the paper *Adversarial Inverse Reinforcement Learning for Market Making* (2024) [[arxiv](), [ACM]() - both will be added soon] by Juraj Zelman (Richfox Capital &  ETH Zürich), Martin Stefanik (Richfox Capital &  ETH Zürich), Moritz Weiß (ETH Zürich) and Prof. Dr. Josef Teichmann (ETH Zürich). The paper was published and presented at the [5th ACM International Conference on AI in Finance (ICAIF ’24)](https://ai-finance.org/). The links of both affiliations: [Richfox Capital](https://www.richfox.com/) and [ETH Zürich (Dept. of Mathematics)](https://math.ethz.ch/).
 
-The full training pipeline can be found in [`main.ipynb`](main.ipynb). Beforehand, see the [Installation](#installation) section below. We hope you will learn something new and that the project will encourage you to research reinforcement learning methods in more depth.
+The full training pipeline can be found in [`main.ipynb`](main.ipynb). Beforehand, see the [Installation](#installation) section below.
+
+We hope you will learn something new here and that this project sparks your curiosity to explore reinforcement learning methods, as well as other fields!
 
 ## Abstract
 
@@ -42,7 +44,7 @@ In order to run the code, we recommend you to install [`pyenv`](https://github.c
     We recommend you to install the dependencies this way, as the repository uses two modified packages located in the [`.packages`](.packages) directory for better monitoring of the training process and a minor bug fix.
 4. Run the [`main.ipynb`](main.ipynb) notebook. Note that in order to query the pricing and trades data, you will need an active data provider subscription as described in Section 1 of the notebook.
 
-## Package Modifications ([SB3](https://stable-baselines3.readthedocs.io/en/master/) & [imitation](https://imitation.readthedocs.io/en/latest/index.html))
+## Package modifications ([SB3](https://stable-baselines3.readthedocs.io/en/master/) & [imitation](https://imitation.readthedocs.io/en/latest/index.html))
 
 The repository uses two modified packages located in the [`.packages`](.packages) directory (all modifications are marked with `# MODIFIED` comments). The modifications are as follows:
 
