@@ -1,9 +1,11 @@
 ![Adversarial Inverse Reinforcement Learning for Market Making](.images/title_image.png)
 
+[![Python 3.11](https://img.shields.io/badge/python-3.11-blue?style=flat&logo=python)](https://www.python.org/downloads/release/python-3119/)
 [![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Python 3.11](https://img.shields.io/badge/python-3.11-blue?style=flat&logo=python)]([PyPI](https://www.python.org/downloads/release/python-3119/))
-[![GPL-3.0 License](https://img.shields.io/badge/License-GPL%203.0-blue)](https://www.gnu.org/licenses/gpl-3.0)
+[![Stable-Baselines3 Badge](https://img.shields.io/badge/stable--baselines3-v2.2.1-green)](https://stable-baselines3.readthedocs.io/en/master/)
+[![Imitation Badge](https://img.shields.io/badge/imitation-v1.0.0-green)](https://imitation.readthedocs.io/en/latest/)
+[![GPL-3.0 License](https://img.shields.io/badge/License-GPL%203.0-green)](https://www.gnu.org/licenses/gpl-3.0)
 
 This repository contains the code for the paper *Adversarial Inverse Reinforcement Learning for Market Making* (2024) [[arxiv](), [ACM]() - both will be added soon] by Juraj Zelman (Richfox Capital &  ETH Zürich), Martin Stefanik (Richfox Capital &  ETH Zürich), Moritz Weiß (ETH Zürich) and Prof. Dr. Josef Teichmann (ETH Zürich). The paper was published and presented at the [ICAIF'24](https://ai-finance.org/) conference. The links for both affiliations: [Richfox Capital](https://www.richfox.com/) and [ETH Zürich (Dept. of Mathematics)](https://math.ethz.ch/).
 
@@ -43,6 +45,7 @@ In order to run the code, we recommend you to install [`pyenv`](https://github.c
 ## Package Modifications ([SB3](https://stable-baselines3.readthedocs.io/en/master/) & [imitation](https://imitation.readthedocs.io/en/latest/index.html))
 
 The repository uses two modified packages located in the [`.packages`](.packages) directory (all modifications are marked with `# MODIFIED` comments). The modifications are as follows:
+
 - [`logger.py`](.packages/stable_baselines3-2.2.1/stable_baselines3/common/logger.py): In this file we suppress the logging printouts during the training process.
 - [`utils.py`](.packages/stable_baselines3-2.2.1/stable_baselines3/common/utils.py): Here we add a minor fix to avoid overflow warnings that might sometimes appear during the training process.
 - [`common.py`](.packages/imitation-1.0.0/src/imitation/algorithms/adversarial/common.py): In this file we implement multiple enhancements: reward scaling, balancing of expert samples, and we enhance the monitoring of the training process.
