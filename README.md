@@ -41,7 +41,7 @@ In order to run the code, we recommend you to install [`pyenv`](https://github.c
     poetry install
     ```
 
-    We recommend you to install the dependencies this way, as the repository uses two modified packages located in the [`.packages`](.packages) directory for better monitoring of the training process and a minor bug fix.
+    We recommend you to install the dependencies this way, as the repository uses two modified packages located in the [`.packages`](.packages) directory for better monitoring of the training process and a minor bug fix (see the below [Package modifications](#package-modifications) section).
 4. Run the [`main.ipynb`](main.ipynb) notebook. Note that in order to query the pricing and trades data, you will need an active data provider subscription as described in Section 1 of the notebook.
 
 ## Package modifications
