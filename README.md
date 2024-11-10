@@ -44,9 +44,9 @@ In order to run the code, we recommend you to install [`pyenv`](https://github.c
     We recommend you to install the dependencies this way, as the repository uses two modified packages located in the [`.packages`](.packages) directory for better monitoring of the training process and a minor bug fix.
 4. Run the [`main.ipynb`](main.ipynb) notebook. Note that in order to query the pricing and trades data, you will need an active data provider subscription as described in Section 1 of the notebook.
 
-## Package modifications ([SB3](https://stable-baselines3.readthedocs.io/en/master/) & [imitation](https://imitation.readthedocs.io/en/latest/index.html))
+## Package modifications
 
-The repository uses two modified packages located in the [`.packages`](.packages) directory (all modifications are marked with `# MODIFIED` comments). The modifications are as follows:
+The repository uses two modified packages [stable-baselines3](https://stable-baselines3.readthedocs.io/en/master/) and [imitation](https://imitation.readthedocs.io/en/latest/index.html). The modified versions are located in the [`.packages`](.packages) directory (all of our modifications are marked with `# MODIFIED` comments). The modifications are as follows:
 
 - [`common.py`](.packages/imitation-1.0.0/src/imitation/algorithms/adversarial/common.py): In this file we implement multiple enhancements that seemed to empirically improve the training process. Firstly, we update perform the discriminator optimization step for every batch of data instead of as an aggregate. Further, we scale the rewards for the PPO (generator) training and implement balancing of expert samples in the training process to improve the stability of the training process. Lastly, we enhance the monitoring of the training statistics.
 - [`utils.py`](.packages/stable_baselines3-2.2.1/stable_baselines3/common/utils.py): Here we add a minor fix to avoid overflow warnings that might sometimes appear during the training process of the PPO algorithm (generator).
