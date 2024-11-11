@@ -1,0 +1,126 @@
+Metadata-Version: 2.1
+Name: stable_baselines3
+Version: 2.2.1
+Summary: Pytorch version of Stable Baselines, implementations of reinforcement learning algorithms.
+Home-page: https://github.com/DLR-RM/stable-baselines3
+Author: Antonin Raffin
+Author-email: antonin.raffin@dlr.de
+License: MIT
+Project-URL: Code, https://github.com/DLR-RM/stable-baselines3
+Project-URL: Documentation, https://stable-baselines3.readthedocs.io/
+Project-URL: Changelog, https://stable-baselines3.readthedocs.io/en/master/misc/changelog.html
+Project-URL: SB3-Contrib, https://github.com/Stable-Baselines-Team/stable-baselines3-contrib
+Project-URL: RL-Zoo, https://github.com/DLR-RM/rl-baselines3-zoo
+Project-URL: SBX, https://github.com/araffin/sbx
+Keywords: reinforcement-learning-algorithms reinforcement-learning machine-learning gymnasium gym openai stable baselines toolbox python data-science
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+License-File: NOTICE
+Requires-Dist: gymnasium<0.30,>=0.28.1
+Requires-Dist: numpy>=1.20
+Requires-Dist: torch>=1.13
+Requires-Dist: cloudpickle
+Requires-Dist: pandas
+Requires-Dist: matplotlib
+Provides-Extra: tests
+Requires-Dist: pytest; extra == "tests"
+Requires-Dist: pytest-cov; extra == "tests"
+Requires-Dist: pytest-env; extra == "tests"
+Requires-Dist: pytest-xdist; extra == "tests"
+Requires-Dist: mypy; extra == "tests"
+Requires-Dist: ruff>=0.0.288; extra == "tests"
+Requires-Dist: black<24,>=23.9.1; extra == "tests"
+Provides-Extra: docs
+Requires-Dist: sphinx<8,>=5; extra == "docs"
+Requires-Dist: sphinx-autobuild; extra == "docs"
+Requires-Dist: sphinx-rtd-theme>=1.3.0; extra == "docs"
+Requires-Dist: sphinxcontrib.spelling; extra == "docs"
+Requires-Dist: sphinx_copybutton; extra == "docs"
+Provides-Extra: extra
+Requires-Dist: opencv-python; extra == "extra"
+Requires-Dist: pygame; extra == "extra"
+Requires-Dist: tensorboard>=2.9.1; extra == "extra"
+Requires-Dist: psutil; extra == "extra"
+Requires-Dist: tqdm; extra == "extra"
+Requires-Dist: rich; extra == "extra"
+Requires-Dist: shimmy[atari]~=1.3.0; extra == "extra"
+Requires-Dist: pillow; extra == "extra"
+Requires-Dist: autorom[accept-rom-license]~=0.6.1; extra == "extra"
+Provides-Extra: extra-no-roms
+Requires-Dist: opencv-python; extra == "extra-no-roms"
+Requires-Dist: pygame; extra == "extra-no-roms"
+Requires-Dist: tensorboard>=2.9.1; extra == "extra-no-roms"
+Requires-Dist: psutil; extra == "extra-no-roms"
+Requires-Dist: tqdm; extra == "extra-no-roms"
+Requires-Dist: rich; extra == "extra-no-roms"
+Requires-Dist: shimmy[atari]~=1.3.0; extra == "extra-no-roms"
+Requires-Dist: pillow; extra == "extra-no-roms"
+
+
+
+# Stable Baselines3
+
+Stable Baselines3 is a set of reliable implementations of reinforcement learning algorithms in PyTorch. It is the next major version of [Stable Baselines](https://github.com/hill-a/stable-baselines).
+
+These algorithms will make it easier for the research community and industry to replicate, refine, and identify new ideas, and will create good baselines to build projects on top of. We expect these tools will be used as a base around which new ideas can be added, and as a tool for comparing a new approach against existing ones. We also hope that the simplicity of these tools will allow beginners to experiment with a more advanced toolset, without being buried in implementation details.
+
+
+## Links
+
+Repository:
+https://github.com/DLR-RM/stable-baselines3
+
+Blog post:
+https://araffin.github.io/post/sb3/
+
+Documentation:
+https://stable-baselines3.readthedocs.io/en/master/
+
+RL Baselines3 Zoo:
+https://github.com/DLR-RM/rl-baselines3-zoo
+
+SB3 Contrib:
+https://github.com/Stable-Baselines-Team/stable-baselines3-contrib
+
+## Quick example
+
+Most of the library tries to follow a sklearn-like syntax for the Reinforcement Learning algorithms using Gym.
+
+Here is a quick example of how to train and run PPO on a cartpole environment:
+
+```python
+import gymnasium
+
+from stable_baselines3 import PPO
+
+env = gymnasium.make("CartPole-v1")
+
+model = PPO("MlpPolicy", env, verbose=1)
+model.learn(total_timesteps=10_000)
+
+vec_env = model.get_env()
+obs = vec_env.reset()
+for i in range(1000):
+    action, _states = model.predict(obs, deterministic=True)
+    obs, reward, done, info = vec_env.step(action)
+    vec_env.render()
+    # VecEnv resets automatically
+    # if done:
+    #   obs = vec_env.reset()
+
+```
+
+Or just train a model with a one liner if [the environment is registered in Gymnasium](https://gymnasium.farama.org/tutorials/gymnasium_basics/environment_creation/) and if [the policy is registered](https://stable-baselines3.readthedocs.io/en/master/guide/custom_policy.html):
+
+```python
+from stable_baselines3 import PPO
+
+model = PPO("MlpPolicy", "CartPole-v1").learn(10_000)
+```
+

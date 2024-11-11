@@ -156,6 +156,8 @@ results_backtest/
 figures/
 monitor_logs/
 .lake_cache/
+!.packages/
+!.packages/**
 
 # TODO: Ignore temporarily before the repo is fully updated
 to_be_processed/
