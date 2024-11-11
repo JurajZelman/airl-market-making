@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: imitation
-Version: 1.0.1.dev176883612+d20241101
+Version: 0.0.0
 Summary: Implementation of modern reward and imitation learning algorithms.
 Home-page: https://github.com/HumanCompatibleAI/imitation
 Author: Center for Human-Compatible AI and Google

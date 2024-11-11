@@ -52,6 +52,7 @@ The repository uses two modified packages [stable-baselines3](https://stable-bas
 - [`utils.py`](.packages/stable_baselines3-2.2.1/stable_baselines3/common/utils.py): Here we add a minor fix to avoid overflow warnings that might sometimes appear during the training process of the PPO algorithm (generator).
 - [`logger.py`](.packages/stable_baselines3-2.2.1/stable_baselines3/common/logger.py): In this file we suppress the logging printouts during the training process.
 - [`bc.py`](.packages/imitation-1.0.0/src/imitation/algorithms/bc.py): Lastly, this enhancement of training process monitoring for the behavioral cloning algorithm is an artifact of the initial research and is not used in the final implementation.
+- [`setup.py`](.packages/imitation-1.0.0/setup.py): Here we comment the `use_scm_version` setting to avoid installation issues.
 
 ## Contributing
 
