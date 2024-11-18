@@ -60,7 +60,7 @@ In case you find any bugs, have any suggestions for improvements or have any que
 
 ## Citation
 
-In case you reference this work, please use the following citation:
+For referencing this work, please use the following citation:
 
 ```bibtex
 @inproceedings{
