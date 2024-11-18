@@ -58,6 +58,29 @@ The repository uses two modified packages [stable-baselines3](https://stable-bas
 
 In case you find any bugs, have any suggestions for improvements or have any questions, feel free to open an issue or a pull request. I am happy to help and discuss any potential improvements.
 
+## Citation
+
+In case you reference this work, please use the following citation:
+
+```bibtex
+@inproceedings{
+    10.1145/3677052.3698641,
+    author = {Zelman, Juraj and Stefanik, Martin and Weiss, Moritz and Teichmann, Josef},
+    title = {Adversarial Inverse Reinforcement Learning for Market Making},
+    year = {2024},
+    isbn = {9798400710810},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    url = {https://doi.org/10.1145/3677052.3698641},
+    doi = {10.1145/3677052.3698641},
+    booktitle = {Proceedings of the 5th ACM International Conference on AI in Finance},
+    pages = {81–89},
+    numpages = {9},
+    location = {Brooklyn, NY, USA},
+    series = {ICAIF '24}
+}
+```
+
 ## Disclaimer
 
 This repository was prepared for informational purposes, in part, by members, in their personal capacity, of the Research Department of Richfox Capital Investment Management AG hereinafter "Richfox" and is not a product of Richfox. The information is not intended to be relied upon as investment advise or as a recommendation to buy, sell, or hold any securities or financial instruments. The contents of this repository should not be construed as an offer, solicitation, or recommendation to engage in any investment activity. The members have taken reasonable care in preparing this repository, but do not warrant or guarantee the accuracy, completeness, or timeliness of the information contained herein. The repository may include information obtained from third-party sources, which we believe to be reliable. However, Richfox does not endorse or make any representation or warranty regarding the accuracy or completeness of such third-party information. Any reliance on the information contained is at the reader’s own risk. By accessing or using this repository, you acknowledge and agree to the terms of this disclaimer. If you do not agree with these terms, please do not rely on the information contained herein.
