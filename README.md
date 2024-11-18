@@ -7,7 +7,7 @@
 [![Imitation Badge](https://img.shields.io/badge/imitation-v1.0.0-green)](https://imitation.readthedocs.io/en/latest/)
 [![GPL-3.0 License](https://img.shields.io/badge/License-GPL%203.0-green)](https://www.gnu.org/licenses/gpl-3.0)
 
-This repository contains the code for the paper [*Adversarial Inverse Reinforcement Learning for Market Making* (2024)](https://dl.acm.org/doi/pdf/10.1145/3677052.3698641) by Juraj Zelman (Richfox Capital &  ETH Zürich), Martin Stefanik (Richfox Capital &  ETH Zürich), Moritz Weiß (ETH Zürich) and Prof. Dr. Josef Teichmann (ETH Zürich). The paper was published and presented at the [5th ACM International Conference on AI in Finance (ICAIF ’24)](https://ai-finance.org/). The links of both affiliations: [Richfox Capital](https://www.richfox.com/) and [ETH Zürich (Dept. of Mathematics)](https://math.ethz.ch/).
+This repository contains the code for the paper [*Adversarial Inverse Reinforcement Learning for Market Making* (2024)](https://dl.acm.org/doi/pdf/10.1145/3677052.3698641) by Juraj Zelman (Richfox Capital &  ETH Zürich), Martin Stefanik (Richfox Capital &  ETH Zürich), Moritz Weiß (ETH Zürich) and Prof. Dr. Josef Teichmann (ETH Zürich). The paper was published and presented at the [5th ACM International Conference on AI in Finance (ICAIF ’24)](https://ai-finance.org/) in New York, USA. The links of both affiliations: [Richfox Capital](https://www.richfox.com/) and [ETH Zürich (Dept. of Mathematics)](https://math.ethz.ch/).
 
 The full training pipeline can be found in [`main.ipynb`](main.ipynb). Beforehand, see the [Installation](#installation) section below.
 
