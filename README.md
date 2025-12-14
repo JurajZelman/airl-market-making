@@ -1,7 +1,7 @@
 ![Adversarial Inverse Reinforcement Learning for Market Making](.images/title_image.png)
 
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue?style=flat&logo=python)](https://www.python.org/downloads/release/python-3119/)
-[![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Stable-Baselines3 Badge](https://img.shields.io/badge/stable--baselines3-v2.2.1-green)](https://stable-baselines3.readthedocs.io/en/master/)
 [![Imitation Badge](https://img.shields.io/badge/imitation-v1.0.0-green)](https://imitation.readthedocs.io/en/latest/)
@@ -19,30 +19,28 @@ In this paper, we propose a novel application of the Adversarial Inverse Reinfor
 
 ## Installation
 
-In order to run the code, we recommend you to install [`pyenv`](https://github.com/pyenv/pyenv) (for managing Python versions) and [`poetry`](https://python-poetry.org/) (for managing dependencies) or alternative management tools. The project can be installed as follows:
+The project uses [`uv`](https://github.com/astral-sh/uv) for dependency management. See the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/) to install it first.
 
-1. Clone and cd into the repository:
+Then install the project:
+
+1. Clone the repository (requires [Git LFS](https://git-lfs.com/)):
 
     ```bash
+    git lfs install
     git clone git@github.com:JurajZelman/airl-market-making.git
     cd airl-market-making
     ```
 
-2. Set the Python version to `3.11.9`:
+2. Set the Python version and install dependencies:
 
     ```bash
-    pyenv install 3.11.9
-    pyenv local 3.11.9
+    uv python pin 3.11
+    uv sync
     ```
 
-3. Install the dependencies:
+    This will create a `.venv` with Python 3.11 and install all pinned dependencies, including the modified packages in [`.packages`](.packages) (see [Package modifications](#package-modifications)).
 
-    ```bash
-    poetry install
-    ```
-
-    We recommend you to install the dependencies this way, as the repository uses two modified packages located in the [`.packages`](.packages) directory for better monitoring of the training process and a minor bug fix (see the [Package modifications](#package-modifications) section below).
-4. Run the [`main.ipynb`](main.ipynb) notebook. Note that in order to query the pricing and trades data, you will need an active data provider subscription as described in Section 1 of the notebook.
+3. Run the [`main.ipynb`](main.ipynb) notebook: Note that in order to query the pricing and trades data, you will need an active data provider subscription as described in Section 1 of the notebook.
 
 ## Package modifications
 

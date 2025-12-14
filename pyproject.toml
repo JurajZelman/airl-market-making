@@ -1,37 +1,53 @@
-[tool.poetry]
+[project]
 name = "airl-market-making"
 version = "1.0.0"
-description = "Codes for the AIRL for Market Making paper."
-authors = ["Juraj Zelman"]
-package-mode = false
+description = "Code for the AIRL for Market Making paper."
+authors = [
+    { name = "Juraj Zelman"},
+]
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    # Local modified packages
+    "imitation @ {root:uri}/.packages/imitation-1.0.0",
+    "stable-baselines3 @ {root:uri}/.packages/stable_baselines3-2.2.1",
+    "torch==2.9.1",
+    "gymnasium==0.29.1",
+    "numpy==1.26.4",
+    "scipy==1.16.3",
+    "scikit-learn==1.8.0",
+    "sbx-rl==0.9.1",
+    "pyarrow==14.0.2",
+    "datasets==2.19.2",
+    "polars==1.36.1",
+    "pandas==2.3.3",
+    "joblib==1.4.2",
+    "lakeapi==0.11.2",
+    "matplotlib==3.10.8",
+    "plotly==6.5.0",
+    "seaborn==0.13.2",
+    "ipykernel==7.1.0",
+    "ipywidgets==8.1.8",
+    "nbformat==5.10.4",
+    "setuptools==80.9.0",
+    "sortedcontainers==2.4.0",
+    "rich==14.2.0",
+    "pyllist==0.3",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.11,<3.12"
-imitation = {path = "./.packages/imitation-1.0.0"}
-stable-baselines3 = {path = "./.packages/stable_baselines3-2.2.1"}
-numpy = "^1.26.0"
-matplotlib = "^3.8.0"
-setuptools = "^66"
-sortedcontainers = "^2.4.0"
-plotly = "^5.17.0"
-ipykernel = "^6.25.2"
-nbformat = "^5.9.2"
-polars = "^0.19.15"
-pandas = "^2.1.1"
-ipywidgets = "^8.1.1"
-rich = "^13.6.0"
-pyllist = "^0.3"
-sbx-rl = "^0.9.0"
-seaborn = "^0.13.2"
-lakeapi = "0.11.2"
-
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.6.5"
-pre-commit = "^3.8.0"
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.6.5",
+    "pre-commit>=4.2.0",
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.ruff]
 line-length = 80
@@ -42,22 +58,22 @@ exclude = [
 
 [tool.ruff.lint]
 select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "I",   # isort
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "N",   # PEP8 naming convetions
-    "D"    # pydocstyle
+    "E",   # pycodestyle errors (code style violations)
+    "W",   # pycodestyle warnings (potential style issues)
+    "F",   # pyflakes (undefined names, unused imports)
+    "I",   # isort (import sorting and organization)
+    "B",   # flake8-bugbear (common Python programming mistakes)
+    "C4",  # flake8-comprehensions (list/dict/set comprehension improvements)
+    "N",   # PEP8 naming conventions (variable and function naming)
+    "D",   # pydocstyle (docstring style and presence)
+    "D213", # multi-line docstring summary should start at the first line
 ]
 ignore = [
-    "C901",  # too complex
-    "W191",  # indentation contains tabs
-    "D205",  # blank line before summary
-    "D212",  # multi-line docstring summary should start at the second line
-    "D401",  # imperative mood
-
+    "C901",  # cyclomatic complexity too high (overly complex functions)
+    "W191",  # indentation contains tabs (use spaces instead)
+    "D401",  # imperative mood in docstrings (first line should be imperative)
+    "D212",  # multi-line docstring summary should start at the first line
+    "D205",  # missing blank line after summary line in docstrings
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -71,3 +87,6 @@ line-ending = "auto"
 
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
+
+[tool.hatch.build.targets.wheel]
+include = ["*"]
